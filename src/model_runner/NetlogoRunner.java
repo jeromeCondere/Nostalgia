@@ -1,7 +1,9 @@
 package model_runner;
+import model_runner.NetlogoRunner;
 
-import org.nlogo.api.CompilerException;
 import org.nlogo.lite.InterfaceComponent;
+import org.nlogo.api.CompilerException;
+
 
 public class NetlogoRunner extends GraphicModelRunner {
 
@@ -9,15 +11,14 @@ public class NetlogoRunner extends GraphicModelRunner {
 	protected InterfaceComponent comp; 
 	protected int maxTicks=4000;
 	protected int tick=0;
+	protected boolean closeAtEnd=false;
 	/**
 	 * @param args
 	 */
 	public NetlogoRunner(String path)
 	{
-		
 		super(path);
 		comp= new InterfaceComponent(frame);
-		
 	}
 	public NetlogoRunner(String path,String argv[])
 	{
@@ -47,6 +48,35 @@ public class NetlogoRunner extends GraphicModelRunner {
 			e.printStackTrace ();
 		}
 	}
+	public int getMaxTicks()
+	{
+		return this.maxTicks;
+	}
+	public void setMaxTicks(int maxTicks)
+	{
+		if(maxTicks>0)
+		  this.maxTicks=maxTicks;
+	}
+	
+	public void go()
+	{
+		NetlogoCmd("go");
+	}
+	public void setup()
+	{
+		NetlogoCmd("setup");
+	}
+	public Object report(String source)
+	{
+		try {
+			return comp.report(source);
+		} catch (CompilerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public void run() {
 		// TODO Auto-generated method stub
 		try{
@@ -75,6 +105,13 @@ public class NetlogoRunner extends GraphicModelRunner {
 		
 				  }
 
+	public void endModel()
+	{
+		if(this.closeAtEnd==false)
+			return;		
+		if(tick>maxTicks)
+			frame.dispose();
+	}
 }
 
 
