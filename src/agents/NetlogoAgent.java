@@ -1,23 +1,36 @@
 package agents;
+import java.util.ArrayList;
+
+
+import model_runner.Communicate;
 import model_runner.NetlogoRunner;
+import model_runner.net1;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
-public class NetlogoAgent extends Agent 
+import jade.lang.acl.ACLMessage;
+public class NetlogoAgent extends NosAgent
 {
     protected  int fps=90;//default max frame rate
 	protected NetlogoRunner net;
 	public NetlogoAgent()
 	{
-		net=new NetlogoRunner("random_walk_1.nlogo",700,700);
+		net=new net1("random_walk_1.nlogo",700,700);
 	}
+	
 	public NetlogoAgent(String path,int width,int heigth)
 	{
 		net=new NetlogoRunner(path,width,heigth);
 	}
-	protected void setup() {
+	public void setNetlogoRuner(NetlogoRunner runner)
+	{
+		this.net=runner;
+	}
+	
+	protected void setup() 
+    {
 	  	
 	   	long period=1000/fps;
 		SequentialBehaviour SequentialExec = new SequentialBehaviour();
@@ -26,6 +39,7 @@ public class NetlogoAgent extends Agent
 		SequentialExec.addSubBehaviour(new End(this));
 	  	this.addBehaviour(SequentialExec);
 	  } 
+	
 	public NetlogoRunner getRunner()
 	{
 		return net;
@@ -48,7 +62,39 @@ public class NetlogoAgent extends Agent
 			if(ticks>=net.getMaxTicks())
 				stop();
 			ticks=(double) net.report("ticks");//get ticks
+			if(net instanceof Communicate)
+			{
+			ACLMessage message =receive();
+			if(message!=null)
+			{
+				
+				
+				while(message!=null){
+					message=receive();
+					/*
+					 * the acl message  will be in json for communication inter netlogo
+					 */
+					((Communicate) net).TreatInboxMessage(message);
+				   }
+				
+			}
+			}
+			
 			net.go();
+			if(net instanceof Communicate)
+			{
+				for(int i=0;i<Outboxes.size();i++)
+				{
+					ArrayList<String>dests=Outboxes.get(i).getOwners();
+					for(int j=0;j<dests.size();j++)
+					{
+						//we send our message to all dest
+						ACLMessage message=((Communicate) net).sendOutboxMessage(dests.get(j),Outboxes.get(i).getName());
+						send(message);
+					}
+				}
+			}
+			
 		}
 		
 
