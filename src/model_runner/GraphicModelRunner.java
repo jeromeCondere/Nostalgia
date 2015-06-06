@@ -1,13 +1,13 @@
 package model_runner;
 
-public class GraphicModelRunner extends Model implements GraphicRunner {
+public class GraphicModelRunner extends ModelRunner implements GraphicRunner {
 
 	protected int width=400;
 	protected int heigth=400;
 	protected float x=0;
 	protected float y=0;
 	protected boolean redim=true;
-	protected String name="Netlogo";
+	protected String name="Runner1";
 	public GraphicModelRunner(String path)
 	{
 		super(path);
@@ -71,6 +71,11 @@ public class GraphicModelRunner extends Model implements GraphicRunner {
 	public void setName(String name) {
 		// TODO Auto-generated method stub
 		this.name=name;
+	}
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return name;
 	}
 
 

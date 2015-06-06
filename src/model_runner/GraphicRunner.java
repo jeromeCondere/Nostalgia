@@ -10,4 +10,5 @@ public interface GraphicRunner {
 	public int getHeigth();
 	public void setRedim(boolean redim);
 	public void setName(String name);
+	public String getName();
 }

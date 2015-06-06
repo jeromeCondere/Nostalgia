@@ -9,9 +9,11 @@ public class NetlogoRunner extends GraphicModelRunner {
 
 	protected javax.swing.JFrame frame = new javax.swing.JFrame();
 	protected InterfaceComponent comp; 
-	protected int maxTicks=4000;
-	protected int tick=0;
+	protected int maxTicks=2000;//default maxTicks
+	//protected int tick=0;
 	protected boolean closeAtEnd=false;
+	
+	
 	/**
 	 * @param args
 	 */
@@ -61,6 +63,7 @@ public class NetlogoRunner extends GraphicModelRunner {
 	public void go()
 	{
 		NetlogoCmd("go");
+		
 	}
 	public void setup()
 	{
@@ -83,6 +86,7 @@ public class NetlogoRunner extends GraphicModelRunner {
 		 java.awt.EventQueue.invokeAndWait(
 				    new Runnable() {
 				      public void run() {
+				    	frame.setTitle(name);
 				        frame.setSize(width,heigth);
 				        frame.add(comp);
 				        frame.setVisible(true);
@@ -105,11 +109,10 @@ public class NetlogoRunner extends GraphicModelRunner {
 		
 				  }
 
+	
 	public void endModel()
 	{
-		if(this.closeAtEnd==false)
-			return;		
-		if(tick>maxTicks)
+		    if(this.closeAtEnd==true)
 			frame.dispose();
 	}
 }
