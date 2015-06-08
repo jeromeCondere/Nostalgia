@@ -77,6 +77,16 @@ public class GraphicModelRunner extends ModelRunner implements GraphicRunner {
 		// TODO Auto-generated method stub
 		return name;
 	}
+	@Override
+	public float getPosX() {
+		// TODO Auto-generated method stub
+		return x;
+	}
+	@Override
+	public float getPosY() {
+		// TODO Auto-generated method stub
+		return y;
+	}
 
 
 }

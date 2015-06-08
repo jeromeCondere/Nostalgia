@@ -1,31 +1,44 @@
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
+import jade.wrapper.StaleProxyException;
+import model_runner.NetlogoRunner;
+
 import org.nlogo.app.App;
 import org.nlogo.headless.HeadlessWorkspace;
 import org.nlogo.lite.InterfaceComponent;
+
+import agents.NetlogoAgent;
 public class Main {
   public static void main(String[] argv) {
-    try {
-      final javax.swing.JFrame frame = new javax.swing.JFrame();
-      final InterfaceComponent comp = new InterfaceComponent(frame);
-      java.awt.EventQueue.invokeAndWait(
-    new Runnable() {
-      public void run() {
-        frame.setSize(1000, 700);
-        frame.add(comp);
-        frame.setVisible(true);
-        try {
-          comp.open("Wolf Sheep Predation (docked).nlogo");
-        }
-        catch(Exception ex) {
-          ex.printStackTrace();
-        }}});
-      //comp.command("set density 62");
-      //comp.command("random-seed 0");
-      comp.command("setup");
-      comp.command("repeat 5000 [ go ]");
-      System.out.println(comp.report("burned-trees"));
+	  jade.core.Runtime runt= jade.core.Runtime.instance();
+	  Profile myProfile = new ProfileImpl();
+	  
+	  //myProfile.setParameter(Profile.MAIN_HOST, "localhost");
+	  //myProfile.setParameter(Profile.MAIN_PORT, "1099");
+	  
+	  ContainerController myContainer = runt.createMainContainer(myProfile);
+
+	// .. load a container into the above variable ..
+	
+	
+	  
+		try {
+			NetlogoAgent a=new NetlogoAgent("walk_1.nlogo",600,600);
+		    
+			Object o[]={a};
+			
+		    AgentController rma = myContainer.createNewAgent("rma", "jade.tools.rma.rma", null);
+		    AgentController net2 = myContainer.createNewAgent("net", "agents.NetlogoAgent", o);
+		    
+		    rma.start();
+		    net2.start();
+		    
+		    
+		} catch(StaleProxyException e) {
+		    e.printStackTrace();
+		}
     }
-    catch(Exception ex) {
-      ex.printStackTrace();
-    }
-  }
 }
+  

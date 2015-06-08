@@ -9,9 +9,10 @@ import jade.core.Agent;
 public abstract class NosAgent extends Agent {
 	protected ArrayList<SubBox> Inboxes=new ArrayList<SubBox>();
 	protected ArrayList<SubBox> Outboxes=new ArrayList<SubBox>();
+	protected NosAgent innerAgent;
 	//two outboxes can't have the same name
 	//two inboxes  can't have the same name
-	public void broadCast()
+ 	public void broadCast()
 	{
 		
 	}
@@ -49,4 +50,18 @@ public abstract class NosAgent extends Agent {
 		Inboxes.add(new SubBox(Inbox,user));
 	}
     
+	public ArrayList<SubBox> getInboxes()
+	{
+		return Inboxes;
+	}
+	public ArrayList<SubBox> getOutBoxes()
+	{
+		return Outboxes;
+	}
+	protected void Copy(NosAgent nos)
+	{
+		this.Inboxes=nos.Inboxes;
+		this.Outboxes=nos.Outboxes;
+		this.innerAgent=nos.innerAgent;
+	}
 }

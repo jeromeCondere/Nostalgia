@@ -5,7 +5,7 @@ import org.nlogo.lite.InterfaceComponent;
 import org.nlogo.api.CompilerException;
 
 
-public class NetlogoRunner extends GraphicModelRunner {
+public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 
 	protected javax.swing.JFrame frame = new javax.swing.JFrame();
 	protected InterfaceComponent comp; 
@@ -20,17 +20,17 @@ public class NetlogoRunner extends GraphicModelRunner {
 	public NetlogoRunner(String path)
 	{
 		super(path);
-		comp= new InterfaceComponent(frame);
+		
 	}
 	public NetlogoRunner(String path,String argv[])
 	{
 		super(path,argv);
-		comp= new InterfaceComponent(frame);
+		
 	}
 	public NetlogoRunner()
 	{
 	super();
-	comp= new InterfaceComponent(frame);
+	
 	}
 	
 	public NetlogoRunner(String path,int width,int heigth)
@@ -39,6 +39,18 @@ public class NetlogoRunner extends GraphicModelRunner {
 		this.setHeigth(heigth);
 		this.setWidth(width);
 		
+		
+	}
+	public Object clone()
+	{
+		NetlogoRunner clonned=new NetlogoRunner(this.getPath(),this.getWidth(),this.getHeigth());
+		clonned.setMaxTicks(this.maxTicks);
+		clonned.setName(this.name);
+		clonned.setRedim(this.redim);
+		clonned.setPosX(this.x);
+		clonned.setPosY(this.y);
+		clonned.setRedim(this.redim);
+		return clonned;
 		
 	}
 	public void NetlogoCmd(String cmd)
@@ -82,6 +94,8 @@ public class NetlogoRunner extends GraphicModelRunner {
 	
 	public void run() {
 		// TODO Auto-generated method stub
+		frame = new javax.swing.JFrame();
+		comp= new InterfaceComponent(frame);
 		try{
 		 java.awt.EventQueue.invokeAndWait(
 				    new Runnable() {
@@ -109,7 +123,14 @@ public class NetlogoRunner extends GraphicModelRunner {
 		
 				  }
 
-	
+	public void setCloseAtEnd(boolean closeAtEnd)
+	{
+		this.closeAtEnd=closeAtEnd;
+	}
+	public boolean getCloseAtEnd()
+	{
+		return this.closeAtEnd;
+	}
 	public void endModel()
 	{
 		    if(this.closeAtEnd==true)
