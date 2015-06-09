@@ -4,6 +4,7 @@ import jade.lang.acl.ACLMessage;
 
 
 
+
 public interface Communicate {
 
 	ACLMessage sendOutboxMessage(String user,String Outbox);//send output data

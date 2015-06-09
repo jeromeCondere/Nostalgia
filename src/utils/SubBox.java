@@ -42,6 +42,24 @@ public class SubBox {
 	{
 		return owners;
 	}
+	public boolean equals(Object obj) {
+	    // Vérification de l'égalité des références
+	    if (obj==this) 
+	    {
+	        return true;
+	    }
+	 
+	    // Vérification du type du paramètre
+	    if (obj instanceof SubBox) {
+	 
+	        // Vérification des valeurs des attributs
+	    	SubBox other = (SubBox) obj;
+	 
+	        return  other.name.equals(name) && other.owners.equals(owners);
+	    }
+	 
+	    return false;
+	}
 	
 	
 }

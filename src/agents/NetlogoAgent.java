@@ -1,6 +1,8 @@
 package agents;
 import java.util.ArrayList;
 
+import utils.SubBox;
+
 import model_runner.Communicate;
 import model_runner.NetlogoRunner;
 import model_runner.net1;
@@ -17,12 +19,17 @@ public class NetlogoAgent extends NosAgent
 	protected NetlogoRunner net;
 	public NetlogoAgent()
 	{
-		net=new net1("random_walk_1.nlogo",700,700);
+		net=new NetlogoRunner("random_walk_1.nlogo",700,700);
 	}
 	public NetlogoAgent(String path,int width,int heigth)
 	{
 		net=new NetlogoRunner(path,width,heigth);
 	}
+	public NetlogoAgent(NetlogoRunner runner)
+	{
+		net=runner;
+	}
+	
 	public void setFps(int fps)
 	{
 		if(fps>0)
@@ -48,12 +55,9 @@ public class NetlogoAgent extends NosAgent
     {
 
 		Object args[]=this.getArguments();
-		if(args==null || args.length==0)
+		if(args!=null) 
 		{
-			net=new net1("random_walk_1.nlogo",700,700);
-			return;
-		}
-		else if (args.length==3)
+		 if (args.length==3)
 		{
 			
 			String path=args[0].toString();
@@ -66,8 +70,9 @@ public class NetlogoAgent extends NosAgent
 			if(args[0] instanceof NetlogoAgent)
 			{
 			    NetlogoAgent agent=	(NetlogoAgent)args[0];
-			    this.Copy(agent);
+			    this.Copy(agent);//this<-agent
 			}
+		}
 		}
 	
 	  	
@@ -107,13 +112,19 @@ public class NetlogoAgent extends NosAgent
 			if(message!=null)
 			{
 				
-				
-				while(message!=null){
-					message=receive();
 					/*
 					 * the acl message  will be in json for communication inter netlogo
 					 */
-					((Communicate) net).TreatInboxMessage(message);
+				   
+				   NetlogoAgent agent = (NetlogoAgent)myAgent;
+				   ArrayList<SubBox>InBoxes=agent.Inboxes;
+				   
+				   //we check if the sender is an owner of an inbox of our agent
+				   for(int i=0;i<Inboxes.size();i++)
+				   {
+					SubBox box_i=Inboxes.get(i);
+				    if(box_i.getOwners().contains(message.getSender().getLocalName()))
+					((Communicate) net).TreatInboxMessage(message);	
 				   }
 				
 			}
@@ -122,6 +133,9 @@ public class NetlogoAgent extends NosAgent
 			net.go();
 			if(net instanceof Communicate)
 			{
+				NetlogoAgent agent = (NetlogoAgent)myAgent;
+				
+				//we send our message in the boxes of the users
 				for(int i=0;i<Outboxes.size();i++)
 				{
 					ArrayList<String>dests=Outboxes.get(i).getOwners();
@@ -130,7 +144,11 @@ public class NetlogoAgent extends NosAgent
 						//we send our message to all dest
 						ACLMessage message=((Communicate) net).sendOutboxMessage(dests.get(j),Outboxes.get(i).getName());
 						//treatOutbox -> send output
+						if(message!=null)
+						{
+					
 						send(message);
+						}
 					}
 				}
 			}

@@ -10,8 +10,8 @@ public abstract class NosAgent extends Agent {
 	protected ArrayList<SubBox> Inboxes=new ArrayList<SubBox>();
 	protected ArrayList<SubBox> Outboxes=new ArrayList<SubBox>();
 	protected NosAgent innerAgent;
-	//two outboxes can't have the same name
-	//two inboxes  can't have the same name
+	//two outboxes can't have the same name and the same user
+	//two inboxes  can't have the same name and the same user
  	public void broadCast()
 	{
 		
@@ -20,6 +20,7 @@ public abstract class NosAgent extends Agent {
 	{
 		
 		//add agents that can receive our message and the box in which the message will be sent
+		//this >message>(user,outbox)
 		if(user==null||Outbox==null)
 			return;
 		for(int i=0;i<Outboxes.size();i++)
@@ -35,7 +36,8 @@ public abstract class NosAgent extends Agent {
 	}
 	public void addSender(String user,String Inbox)
 	{
-		//add agents that we can send our message and the box in which the message will be received
+		//add agents that can send us their message and the box in which the message will be received
+		//(this,Inbox)<message<user
 		if(user==null||Inbox==null)
 			return;
 		for(int i=0;i<Inboxes.size();i++)
@@ -64,4 +66,5 @@ public abstract class NosAgent extends Agent {
 		this.Outboxes=nos.Outboxes;
 		this.innerAgent=nos.innerAgent;
 	}
+	
 }
