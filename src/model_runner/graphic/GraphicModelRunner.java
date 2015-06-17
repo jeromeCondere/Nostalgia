@@ -1,4 +1,6 @@
-package model_runner;
+package model_runner.graphic;
+
+import model_runner.ModelRunner;
 
 public class GraphicModelRunner extends ModelRunner implements GraphicRunner {
 

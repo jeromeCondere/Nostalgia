@@ -1,4 +1,4 @@
-package utils;
+package utils.box;
 
 import java.util.ArrayList;
 

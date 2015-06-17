@@ -1,5 +1,6 @@
-package model_runner;
-import model_runner.NetlogoRunner;
+package model_runner.netlogo;
+import model_runner.graphic.GraphicModelRunner;
+import model_runner.netlogo.NetlogoRunner;
 
 import org.nlogo.lite.InterfaceComponent;
 import org.nlogo.api.CompilerException;

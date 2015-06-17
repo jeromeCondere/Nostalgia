@@ -1,4 +1,4 @@
-package model_runner;
+package model_runner.graphic;
 
 public interface GraphicRunner {
 
