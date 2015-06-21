@@ -3,7 +3,7 @@ package utils.box;
 public class Box {
 	protected String name;
 	protected String mailboxName;
-	protected String username;
+	protected String ownername;
 	public String getName()
 	{
 		return name;
@@ -16,5 +16,15 @@ public class Box {
 	{
 		this.mailboxName=mailboxName;
 		this.name=name;
+		this.ownername=null;
 	}
+	public String getOwnerName()
+	{
+		return this.ownername;
+	}
+	public void setOwnerName(String ownername)
+	{
+		this.ownername=ownername;
+	}
+	
 }

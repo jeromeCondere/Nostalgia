@@ -12,16 +12,12 @@ import jade.lang.acl.ACLMessage;
 public class MailBoxAgent extends Agent {
 	
 	private Mailbox mailbox; 
-	protected NosAgent owner=null;//the agent owner of the MailBox
-	protected String user=null;
-	public MailBoxAgent(NosAgent owner)
-	{
-		this.owner=owner;
-	}
-	public MailBoxAgent(String owner)
-	{
-		this.user=owner;
-	}
+	protected Agent owner;
+ 
+ 	public MailBoxAgent(Agent owner)
+ 	{
+ 		this.owner=owner;
+ 	}
 	public MailBoxAgent()
 	{
 	}
@@ -34,21 +30,21 @@ public class MailBoxAgent extends Agent {
 	}
 	public void addInputConnection(String InboxName,String OutboxName,NosAgent agent )
 	{
-		String mailboxname="mailbox_"+agent.getLocalName();
-		System.out.println("input");
+		String mailboxname=agent.getMailBoxName();
+		//System.out.println("input");
 		getMailbox().addInputConnection(InboxName, OutboxName,mailboxname);
 		
 	}
 	public void addOutputConnection(String OutBoxName,String InboxName,NosAgent agent)
 	{
-		System.out.println("output");
-		String mailboxname="mailbox_"+agent.getLocalName();
+		//System.out.println("output");
+		String mailboxname=agent.getMailBoxName();
 		getMailbox().addOutputConnection(OutBoxName, InboxName, mailboxname);
 		
 	}
 	public void addOutputConnection(String OutBoxName,String InboxName,String name)
 	{
-		System.out.println("output");
+		//System.out.println("output");
 		String mailboxname="mailbox_"+name;
 		getMailbox().addOutputConnection(OutBoxName, InboxName, mailboxname);
 	}

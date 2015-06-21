@@ -7,12 +7,11 @@ public class Mailbox extends Box{
 
 protected ArrayList<Inbox>inboxes=new ArrayList<Inbox>();
 protected ArrayList<Outbox>outboxes=new ArrayList<Outbox>();
-//protected String username
+
 	
 	
 protected Mailbox(String name, String mailboxName) {
 		super(name, mailboxName);
-		// TODO Auto-generated constructor stub
 	}
 public Mailbox(String name)
 {

@@ -21,28 +21,20 @@ import utils.box.SubBox;
 import utils.communication.message.ACLNetlogoMessage;
 
 public class NetlogoMailBoxAgent extends MailBoxAgent {
+	protected String ownername=null;
 
-	public NetlogoMailBoxAgent(NosAgent owner) 
+	public NetlogoMailBoxAgent(NetlogoAgent owner) 
 	{
 		super(owner);
-		String mailboxname="mailbox_"+owner.getLocalName();
-		this.setMailbox(new Mailbox(mailboxname));
-		//System.out.println(mailboxname);
-
-		
-	}
-	public NetlogoMailBoxAgent(String owner) 
-	{
-		super(owner);
-		String mailboxname="mailbox_"+user;
+		ownername=owner.getAgentName();
+		String mailboxname="mailbox_"+ownername;
+		Mailbox mailbox_=new Mailbox(mailboxname);
+		mailbox_.setOwnerName(ownername);
 		this.setMailbox(new Mailbox(mailboxname));
 	}
 	protected void setup()
 	{
-		String mailboxname="mailbox_"+user;
-		//this.mailbox=new Mailbox(mailboxname);
-		System.out.println("setup "+mailboxname);
-		//must change else always reached
+		
 		if(owner instanceof NetlogoAgent)
 		{
 			int fps=45;
@@ -55,7 +47,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 			int fps=140;
 			this.addBehaviour(new MainLoop(this,1000/fps));
 		}
-		//this.doDelete();
+		
 	}
 
 	protected void process()
@@ -64,7 +56,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 		if(message!=null)
 		{  
 		
-			AID owner_aid=new AID(user,AID.ISLOCALNAME);
+			AID owner_aid=new AID(ownername,AID.ISLOCALNAME);
 			   if(message.getSender().equals(owner_aid))//if the sender is the owner of the mailBox we follow
 			   {
 				processMessageFromOwner(message);
@@ -102,17 +94,19 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	    	 ArrayList<Inbox> inboxes=this.getMailbox().getInboxes();
 	    	 ArrayList<Inbox> message_inboxes=netlogoMessage.getInboxes();
 	    	 Outbox message_Outbox=netlogoMessage.getOutbox();
+	    	 //we check if one of our inboxes is connected to the outbox of the message
 	    	 for(int i=0;i<message_inboxes.size();i++)
 	    	 {
 	    		 Inbox inbox_i=message_inboxes.get(i);
 	    		 int index=inboxes.indexOf(inbox_i);
-	    		 if(index!=-1)
+	    		 if(index!=-1)//if the inbox of the message is in our mailbox
 	    		 {
 	    			ArrayList<Outbox> outboxes=inboxes.get(index).getOutBoxes();
+	    			//we check if the outbox of the message is connected to the inbox
 	    			if(outboxes.contains(message_Outbox))
 	    			{
 	    				message.clearAllReceiver();
-	    				AID aid_receiver=new AID(this.user,AID.ISLOCALNAME);
+	    				AID aid_receiver=new AID(this.ownername,AID.ISLOCALNAME);
 	    				message.addReceiver(aid_receiver);
 	    				message.setSender(this.getAID());
 	    				send(message);

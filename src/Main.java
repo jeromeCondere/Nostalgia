@@ -29,8 +29,8 @@ public class Main {
 			NetlogoAgent agt2=new NetlogoAgent(netz,"net2");
 		    HelloWorldAgent yo=new HelloWorldAgent();
 
-		    agt1.addOutputConnection("out1","in2", "net2");//agt1>(net2,yolo_in)
-		    agt2.addInputConnection("in2","out1", "net1");//agt2<(net1,yolo_in)
+		    agt1.addOutputConnection("out1","in2", agt2);//agt1>(net2,yolo_in)
+		    agt2.addInputConnection("in2","out1", agt1);//agt2<(net1,yolo_in)
 			
 		    AgentController rma = myContainer.createNewAgent("rma", "jade.tools.rma.rma", null);
 		    AgentController net1 = myContainer.acceptNewAgent("net1", agt1);	   

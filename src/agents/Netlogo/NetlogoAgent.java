@@ -29,7 +29,7 @@ public class NetlogoAgent extends NosAgent
 {
     protected  int fps=1;//default max frame rate
 	protected NetlogoRunner net;
-	static int uyolo=0;
+	protected String name;
 	public NetlogoAgent()
 	{
 		this.mailboxAgent=new NetlogoMailBoxAgent(this);
@@ -39,10 +39,7 @@ public class NetlogoAgent extends NosAgent
 		this();
 		net=new NetlogoRunner(path,width,heigth);
 	}
-	protected NetlogoAgent(String name)
-	{
-		this.mailboxAgent=new NetlogoMailBoxAgent(name);
-	}
+	
 	public NetlogoAgent(NetlogoRunner runner)
 	{
 		this();
@@ -50,9 +47,17 @@ public class NetlogoAgent extends NosAgent
 	}
 	public NetlogoAgent(NetlogoRunner runner,String name)
 	{
-		this(name);
+		this.name=name;
 		net=runner;
+		this.mailboxAgent=new NetlogoMailBoxAgent(this);
+		
 	}
+	
+	public String getAgentName()
+	{
+		return this.name;
+	}
+	
 	public void setFps(int fps)
 	{
 		if(fps>0)
@@ -62,11 +67,7 @@ public class NetlogoAgent extends NosAgent
 	{
 		this.net=runner;
 	}
-	public static Object[] getNetParams(String path,int width,int heigth)
-	{
-		 Object t[]={path,width,heigth};
-		return t;
-	}
+
 	protected void Copy(NetlogoAgent netAgent)
 	{
 		//copy the references of an object into our object
@@ -80,11 +81,9 @@ public class NetlogoAgent extends NosAgent
     {
 
 		System.out.println("setup "+this.getLocalName());
-		uyolo++;
-		
 		//this.mailboxAgent=new NetlogoMailBoxAgent(this);
 		try {
-			AgentController ac= this.getContainerController().acceptNewAgent("mailbox_"+getLocalName(), mailboxAgent);
+			AgentController ac= this.getContainerController().acceptNewAgent(mailboxAgent.getMailbox().getMaiboxName(), mailboxAgent);
 			System.out.println("start agent controller");
 			ac.start();
 		} catch (StaleProxyException e) {
@@ -172,9 +171,8 @@ public class NetlogoAgent extends NosAgent
 					 if(result!=null && !result.equals(""))
 					 {
 						 message=new ACLNetlogoMessage();
-						 //ACLMessage message2=new ACLMessage(ACLMessage.INFORM);
 						 message.setPerformative(ACLMessage.INFORM);
-						 String own_mailbox="mailbox_"+this.myAgent.getLocalName();
+						 String own_mailbox=agent.getMailBoxName();
 						 AID own_mailbox_aid=new AID(own_mailbox,AID.ISLOCALNAME);
 						 AID receiver_aid=new AID(mailbox,AID.ISLOCALNAME);
 						 

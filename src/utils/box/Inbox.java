@@ -16,6 +16,7 @@ public ArrayList<Outbox> getOutBoxes()
 }
 public void addInputConnection(String OutboxName,String mailbox)//connect the inbox to an outbox
 {
+	
 	this.addOutbox(new Outbox(OutboxName,mailbox));
 }
 protected void addOutbox(Outbox outbox)
@@ -23,7 +24,9 @@ protected void addOutbox(Outbox outbox)
 	if(outbox==null)
 		return;
 	if(outboxes==null)
+		{
 		outboxes=new ArrayList<Outbox>();
+		}
 	//if the outbox doesn't exist yet we add it
 	if(!outboxes.contains(outbox))
 		outboxes.add(outbox);

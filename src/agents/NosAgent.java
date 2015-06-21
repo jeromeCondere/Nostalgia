@@ -32,7 +32,16 @@ public abstract class NosAgent extends Agent {
 	}
 	public void addInputConnection(String InboxName,String OutboxName,String name)
 	{
+		
 		this.mailboxAgent.addInputConnection(InboxName, OutboxName, name);
+	}
+	public String getMailBoxName()
+	{
+		if(this.mailboxAgent==null)
+			return null;
+		if(this.mailboxAgent.getMailbox()==null)
+			return null;
+		return this.mailboxAgent.getMailbox().getMaiboxName();
 	}
 
 	
