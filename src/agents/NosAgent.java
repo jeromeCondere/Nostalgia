@@ -12,7 +12,11 @@ public abstract class NosAgent extends Agent {
 	protected MailBoxAgent mailboxAgent=null;
 	//two outboxes can't have the same name and the same user
 	//two inboxes  can't have the same name and the same user
-
+	protected String name=null;
+	public String getAgentName()
+	{
+		return this.name;
+	}
 	public void addInputConnection(String InboxName,String OutboxName,NosAgent agent )
 	{
 		mailboxAgent.addInputConnection(InboxName, OutboxName, agent);
@@ -41,7 +45,7 @@ public abstract class NosAgent extends Agent {
 			return null;
 		if(this.mailboxAgent.getMailbox()==null)
 			return null;
-		return this.mailboxAgent.getMailbox().getMaiboxName();
+		return this.mailboxAgent.getMailbox().getMailboxName();
 	}
 
 	

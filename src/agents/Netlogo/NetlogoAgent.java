@@ -29,7 +29,6 @@ public class NetlogoAgent extends NosAgent
 {
     protected  int fps=1;//default max frame rate
 	protected NetlogoRunner net;
-	protected String name;
 	public NetlogoAgent()
 	{
 		this.mailboxAgent=new NetlogoMailBoxAgent(this);
@@ -53,10 +52,6 @@ public class NetlogoAgent extends NosAgent
 		
 	}
 	
-	public String getAgentName()
-	{
-		return this.name;
-	}
 	
 	public void setFps(int fps)
 	{
@@ -80,11 +75,11 @@ public class NetlogoAgent extends NosAgent
 	protected void setup() 
     {
 
-		System.out.println("setup "+this.getLocalName());
+		//System.out.println("setup "+this.getLocalName());
 		//this.mailboxAgent=new NetlogoMailBoxAgent(this);
 		try {
-			AgentController ac= this.getContainerController().acceptNewAgent(mailboxAgent.getMailbox().getMaiboxName(), mailboxAgent);
-			System.out.println("start agent controller");
+			AgentController ac= this.getContainerController().acceptNewAgent(mailboxAgent.getMailbox().getMailboxName(), mailboxAgent);
+			//System.out.println("start agent controller");
 			ac.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
@@ -163,8 +158,8 @@ public class NetlogoAgent extends NosAgent
 				{
 					ACLMessage message=null;
 					Inbox inbox_j=inboxes_of_external_mailbox.get(j);
-					String mailbox=inbox_j.getMaiboxName();
-					String user=mailbox.replace("mailbox_","");
+					String mailbox=inbox_j.getMailboxName();
+					String user=inbox_j.getOwnerName();
 					String result=netCom.getOutput(outboxes.get(i).getName(), user);
 					//we send our message to all dest						
 					//treatOutbox -> send output

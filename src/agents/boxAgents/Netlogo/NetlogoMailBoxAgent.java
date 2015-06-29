@@ -27,7 +27,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	{
 		super(owner);
 		ownername=owner.getAgentName();
-		String mailboxname="mailbox_"+ownername;
+		String mailboxname="mailbox_47okoeck"+ownername;
 		Mailbox mailbox_=new Mailbox(mailboxname);
 		mailbox_.setOwnerName(ownername);
 		this.setMailbox(new Mailbox(mailboxname));
@@ -78,7 +78,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 		ArrayList<Inbox>inboxes=((ACLNetlogoMessage)message).getInboxes();
 		for(int i=0;i<inboxes.size();i++)
 		{
-			AID aid_receiver=new AID(inboxes.get(i).getMaiboxName(),AID.ISLOCALNAME);
+			AID aid_receiver=new AID(inboxes.get(i).getMailboxName(),AID.ISLOCALNAME);
 			message.addReceiver(aid_receiver);
 		}
 		message.setSender(this.getAID());

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Inbox extends Box{
 private ArrayList<Outbox> outboxes=null;
-
 public Inbox(String name, String mailboxName) {
 		super(name, mailboxName);
 		// TODO Auto-generated constructor stub

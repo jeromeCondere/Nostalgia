@@ -8,7 +8,7 @@ public class Box {
 	{
 		return name;
 	}
-	public String getMaiboxName()
+	public String getMailboxName()
 	{
 		return mailboxName;
 	}
@@ -17,6 +17,10 @@ public class Box {
 		this.mailboxName=mailboxName;
 		this.name=name;
 		this.ownername=null;
+	}
+	public Box(String name)
+	{
+		this.name=name;
 	}
 	public String getOwnerName()
 	{

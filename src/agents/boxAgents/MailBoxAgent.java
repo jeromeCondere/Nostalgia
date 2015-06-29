@@ -30,16 +30,15 @@ public class MailBoxAgent extends Agent {
 	}
 	public void addInputConnection(String InboxName,String OutboxName,NosAgent agent )
 	{
-		String mailboxname=agent.getMailBoxName();
+		
 		//System.out.println("input");
-		getMailbox().addInputConnection(InboxName, OutboxName,mailboxname);
+		getMailbox().addInputConnection(InboxName, OutboxName,agent);
 		
 	}
 	public void addOutputConnection(String OutBoxName,String InboxName,NosAgent agent)
 	{
 		//System.out.println("output");
-		String mailboxname=agent.getMailBoxName();
-		getMailbox().addOutputConnection(OutBoxName, InboxName, mailboxname);
+		getMailbox().addOutputConnection(OutBoxName, InboxName, agent);
 		
 	}
 	public void addOutputConnection(String OutBoxName,String InboxName,String name)
