@@ -124,6 +124,8 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		
 				  }
 
+	
+	
 	public void setCloseAtEnd(boolean closeAtEnd)
 	{
 		this.closeAtEnd=closeAtEnd;
@@ -137,6 +139,7 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		    if(this.closeAtEnd==true)
 			frame.dispose();
 	}
+	
 }
 
 
