@@ -4,6 +4,13 @@ import java.awt.Color;
 
 public class NetlogoTurtle {
 protected String breed="default";
+protected String shape="default";
+public String getShape() {
+	return shape;
+}
+public void setShape(String shape) {
+	this.shape = shape;
+}
 protected float x=0.0f;
 protected float y=0.0f;
 protected float z=0.0f;

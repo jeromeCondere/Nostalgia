@@ -1,9 +1,16 @@
 package model_runner.netlogo;
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+
+import java.util.ArrayList;
+
 import model_runner.graphic.GraphicModelRunner;
 import model_runner.netlogo.NetlogoRunner;
 
 import org.nlogo.lite.InterfaceComponent;
 import org.nlogo.api.CompilerException;
+
+import utils.Netlogo.NetlogoTurtle;
 
 
 public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
@@ -124,7 +131,7 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		
 				  }
 
-	
+	//public getTurtles
 	
 	public void setCloseAtEnd(boolean closeAtEnd)
 	{
@@ -138,6 +145,87 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 	{
 		    if(this.closeAtEnd==true)
 			frame.dispose();
+	}
+	public static ArrayList<NetlogoTurtle>getTurtles(String content)
+	{
+		/*
+		 * get all turtles from message coded in json
+		 */
+		
+		try{
+			ArrayList<NetlogoTurtle> turtles=new ArrayList<NetlogoTurtle>();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(content);
+			JSONArray turtlesJson=(JSONArray) jsonObject.get("turtles");
+			for(int i=0;i<turtlesJson.size();i++)
+			{
+				JSONObject turtlesJson_i=(JSONObject) turtlesJson.get(i);
+				NetlogoTurtle turtle_i=new NetlogoTurtle();
+				
+				turtle_i.setX((float)turtlesJson_i.get("x"));
+				turtle_i.setY((float)turtlesJson_i.get("y"));
+				turtle_i.setOrientation((float)turtlesJson_i.get("orientation"));
+				if(turtlesJson_i.containsKey("breed"))
+				{
+					turtle_i.setBreed((String)turtlesJson_i.get("breed"));
+				}
+				if(turtlesJson_i.containsKey("z"))
+				{
+					turtle_i.setZ((float)turtlesJson_i.get("z"));
+				}
+				if(turtlesJson_i.containsKey("color"))
+				{
+					JSONObject colorJson=(JSONObject) turtlesJson_i.get("color");
+					int r=(int) colorJson.get("r");
+					int g=(int) colorJson.get("g");
+					int b=(int) colorJson.get("b");
+					turtle_i.setColor(r, g, b);
+				}
+				if(turtlesJson_i.containsKey("shape"))
+				{
+					turtle_i.setBreed((String)turtlesJson_i.get("shape"));
+				}
+					turtles.add(turtle_i);
+			}
+			
+			return turtles;
+		}
+		
+		/*catch(JSONException j)
+		{
+			
+		}
+		*/
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			
+		}
+		return null;
+	}
+	public static JSONObject TurtleToJson( NetlogoTurtle turtle)
+	{
+		if(turtle==null)
+		return null;
+		
+		JSONObject turtleJson=new JSONObject();
+		turtleJson.put("x", turtle.getX());
+		turtleJson.put("y", turtle.getY());
+		turtleJson.put("z", turtle.getZ());
+		
+		int r=turtle.getColor().getRed();
+		int g=turtle.getColor().getGreen();
+		int b=turtle.getColor().getBlue();
+		JSONObject color=new JSONObject();
+		color.put("r", r);
+		color.put("g", g);
+		color.put("b", b);
+		turtleJson.put("color",color);
+		turtleJson.put("breed",turtle.getBreed());
+		turtleJson.put("shape",turtle.getBreed());
+		turtleJson.put("orientation", turtle.getOrientation());
+		
+		return turtleJson;
 	}
 	
 }
