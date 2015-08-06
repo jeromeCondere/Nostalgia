@@ -150,6 +150,13 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 	{
 		/*
 		 * get all turtles from message coded in json
+		 * the message structure is
+		 * {
+		 *   "turtles":[...],
+		 *   "meta-data":[..],//data that does not concern turtles
+		 *   "comments":"..."
+		 * 
+		 * }
 		 */
 		
 		try{
@@ -180,6 +187,8 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 					int g=(int) colorJson.get("g");
 					int b=(int) colorJson.get("b");
 					turtle_i.setColor(r, g, b);
+					
+					
 				}
 				if(turtlesJson_i.containsKey("shape"))
 				{
@@ -227,7 +236,78 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		
 		return turtleJson;
 	}
-	
+	public static JSONObject TurtleToJsonCompressed( NetlogoTurtle turtle)
+	{
+		if(turtle==null)
+		return null;
+		
+		JSONObject turtleJson=new JSONObject();
+		turtleJson.put("x", turtle.getX());
+		turtleJson.put("y", turtle.getY());
+		if(turtle.getZ()!=0)
+		turtleJson.put("z", turtle.getZ());
+		
+		int r=turtle.getColor().getRed();
+		int g=turtle.getColor().getGreen();
+		int b=turtle.getColor().getBlue();
+		JSONObject color=new JSONObject();
+		if(r!=255 && g!=255 && b!=255)
+		{
+		color.put("r", r);
+		color.put("g", g);
+		color.put("b", b);
+		turtleJson.put("color",color);
+		}
+		if(!turtle.getBreed().equals("default"))
+		turtleJson.put("breed",turtle.getBreed());
+		
+		if(!turtle.getShape().equals("default"))
+		turtleJson.put("shape",turtle.getShape());
+		
+		turtleJson.put("orientation", turtle.getOrientation());
+		
+		return turtleJson;
+	}
+	public static JSONArray TurtlesToJson( ArrayList<NetlogoTurtle> turtles)
+	{
+		if(turtles==null || turtles.size()==0)
+		{
+			return null;
+		}
+		JSONArray turtlesJson=new JSONArray();
+		for(int i=0;i<turtles.size();i++)
+		{
+			JSONObject turtleJson=TurtleToJson(turtles.get(i));
+			turtlesJson.add(turtleJson);
+		}
+		
+		return turtlesJson;
+	}
+	public static JSONArray TurtlesToJsonCompressed( ArrayList<NetlogoTurtle> turtles)
+	{
+		if(turtles==null || turtles.size()==0)
+		{
+			return null;
+		}
+		JSONArray turtlesJson=new JSONArray();
+		for(int i=0;i<turtles.size();i++)
+		{
+			JSONObject turtleJson=TurtleToJsonCompressed(turtles.get(i));
+			turtlesJson.add(turtleJson);
+		}
+		
+		return turtlesJson;
+	}
+    protected String setNetlogoMessage(ArrayList<NetlogoTurtle> turtles,JSONObject metadata,String comments)
+    {
+    	JSONArray turtlesJson=TurtlesToJson(turtles);
+    	JSONObject messageJson= new JSONObject();
+    	messageJson.put("turtles",turtlesJson);
+    	messageJson.put("metadata",metadata);
+    	messageJson.put("comments",comments);
+    	return messageJson.toString();
+    }
+
 }
 
 
