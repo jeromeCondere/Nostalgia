@@ -180,6 +180,8 @@ public class NetlogoAgent extends NosAgent
 						 ((ACLNetlogoMessage) message).setInboxes(message_inboxes);
 						 ((ACLNetlogoMessage) message).setOutbox(outboxes.get(i));
 						 message.setContent(result);
+						 message.setOntology("inter-Netlogo-Communicate");
+						 message.setLanguage("Json");
 						 send(message);
 					 }
 				}

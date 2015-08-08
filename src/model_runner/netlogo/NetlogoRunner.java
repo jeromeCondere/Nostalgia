@@ -146,7 +146,7 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		    if(this.closeAtEnd==true)
 			frame.dispose();
 	}
-	public static ArrayList<NetlogoTurtle>getTurtles(String content)
+	public static ArrayList<NetlogoTurtle>getTurtles(String content) throws Exception
 	{
 		/*
 		 * get all turtles from message coded in json
@@ -168,24 +168,27 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 			{
 				JSONObject turtlesJson_i=(JSONObject) turtlesJson.get(i);
 				NetlogoTurtle turtle_i=new NetlogoTurtle();
-				
-				turtle_i.setX((float)turtlesJson_i.get("x"));
-				turtle_i.setY((float)turtlesJson_i.get("y"));
-				turtle_i.setOrientation((float)turtlesJson_i.get("orientation"));
+				float xpos=((Number)turtlesJson_i.get("x")).floatValue();
+				float ypos=((Number)turtlesJson_i.get("y")).floatValue();
+				turtle_i.setX(xpos);
+				turtle_i.setY(ypos);
+				float orientation=((Number)turtlesJson_i.get("orientation")).floatValue();
+				turtle_i.setOrientation(orientation);
 				if(turtlesJson_i.containsKey("breed"))
 				{
 					turtle_i.setBreed((String)turtlesJson_i.get("breed"));
 				}
 				if(turtlesJson_i.containsKey("z"))
 				{
-					turtle_i.setZ((float)turtlesJson_i.get("z"));
+					float zpos=((Number)turtlesJson_i.get("z")).floatValue();
+					turtle_i.setZ(zpos);
 				}
 				if(turtlesJson_i.containsKey("color"))
 				{
 					JSONObject colorJson=(JSONObject) turtlesJson_i.get("color");
-					int r=(int) colorJson.get("r");
-					int g=(int) colorJson.get("g");
-					int b=(int) colorJson.get("b");
+					int r=((Number) colorJson.get("r")).intValue();
+					int g=((Number) colorJson.get("g")).intValue();
+					int b=((Number) colorJson.get("b")).intValue();
 					turtle_i.setColor(r, g, b);
 					
 					
@@ -207,10 +210,10 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		*/
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			throw e;
 			
 		}
-		return null;
+		
 	}
 	public static JSONObject TurtleToJson( NetlogoTurtle turtle)
 	{
@@ -231,7 +234,7 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		color.put("b", b);
 		turtleJson.put("color",color);
 		turtleJson.put("breed",turtle.getBreed());
-		turtleJson.put("shape",turtle.getBreed());
+		turtleJson.put("shape",turtle.getShape());
 		turtleJson.put("orientation", turtle.getOrientation());
 		
 		return turtleJson;

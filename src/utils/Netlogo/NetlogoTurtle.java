@@ -2,6 +2,8 @@ package utils.Netlogo;
 
 import java.awt.Color;
 
+import org.nlogo.agent.Turtle;
+
 public class NetlogoTurtle {
 protected String breed="default";
 protected String shape="default";
@@ -20,11 +22,29 @@ public NetlogoTurtle()
 {
 	
 }
+public NetlogoTurtle(Turtle t)
+{
+	x=(float) t.xcor();
+	y=(float) t.ycor();
+	orientation= (float) t.heading();
+	
+	shape=t.shape();
+	color=org.nlogo.api.Color.getColor(t.color());
+	if(!t.getBreed().printName().equals("TURTLES"))
+	breed=t.getBreed().printName();
+}
 public NetlogoTurtle(float x,float y,Color c)//2D basic constructor
 {
 	
 	this.x=x;
 	this.y=y;
+	this.color=c;
+}
+public NetlogoTurtle(double x,double y,Color c)//2D basic constructor
+{
+	
+	this.x=(float) x;
+	this.y=(float) y;
 	this.color=c;
 }
 public String getBreed() {
