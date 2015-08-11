@@ -2,6 +2,10 @@ package agents.Netlogo;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import agents.NosAgent;
 import agents.boxAgents.Netlogo.NetlogoMailBoxAgent;
 
@@ -38,7 +42,6 @@ public class NetlogoAgent extends NosAgent
 		this();
 		net=new NetlogoRunner(path,width,heigth);
 	}
-	
 	public NetlogoAgent(NetlogoRunner runner)
 	{
 		this();
@@ -120,7 +123,32 @@ public class NetlogoAgent extends NosAgent
 	{
 		return net;
 	}
-	
+	public static Outbox getOutboxJson(JSONObject contentJson)
+	{
+		JSONObject ports=(JSONObject) contentJson.get("ports");
+		JSONObject outboxJson=(JSONObject) ports.get("out");
+		String name=(String) outboxJson.get("name");
+		String mailboxname=(String) outboxJson.get("mailboxname");
+		Outbox outbox=new Outbox(name,mailboxname);
+		return outbox;
+	}
+	public static ArrayList<Inbox> getInboxesboxJson(JSONObject contentJson)
+	{
+		ArrayList<Inbox>inboxes=new ArrayList<Inbox>();
+		JSONObject ports=(JSONObject) contentJson.get("ports");
+		JSONArray inboxesJson=(JSONArray) ports.get("in");
+		for(int i=0;i<inboxesJson.size();i++)
+		{
+			JSONObject inboxJson=(JSONObject) inboxesJson.get(i);
+			String name=(String) inboxJson.get("name");
+			String mailboxname=(String) inboxJson.get("mailboxname");
+			String user=(String)inboxJson.get("user");
+			Inbox inbox=new Inbox(name,mailboxname);
+			inbox.setOwnerName(user);
+			inboxes.add(inbox);
+		}
+		return inboxes;
+	}
 	protected class MainLoop extends TickerBehaviour
 	{
         double ticks=1;
@@ -145,7 +173,6 @@ public class NetlogoAgent extends NosAgent
 
 			NetlogoAgent agent = (NetlogoAgent)myAgent;
 			NetlogoCommunicate netCom=(NetlogoCommunicate)net;
-			
 			//we send our message in the boxes of the users
 			if(agent.mailboxAgent==null || agent.mailboxAgent.getMailbox()==null)
 				return;
@@ -165,6 +192,41 @@ public class NetlogoAgent extends NosAgent
 					//treatOutbox -> send output
 					 if(result!=null && !result.equals(""))
 					 {
+						 //boolean isJson=true;
+						 try{
+							 JSONParser jsonParser = new JSONParser();
+							 JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+							 ArrayList<Inbox>message_inboxespo=new ArrayList<Inbox>();
+							 message_inboxespo.add(inbox_j);
+							 JSONObject ports=new JSONObject();
+							
+							 ports.put("out", NetlogoRunner.OutboxToJson(outboxes.get(i)));
+							 ports.put("in", NetlogoRunner.InboxesToJson(message_inboxespo));
+							 jsonObject.put("ports", ports);
+							 							 
+							 result=jsonObject.toString();
+						 }
+						 catch( Exception e)
+						 {
+							 //the result is not Json
+							 JSONObject contentJson= new JSONObject();
+							 JSONObject info=new JSONObject();
+							 JSONObject originalData=new JSONObject();
+							 originalData.put("original content",result);
+							 info.put("log", "original object was not json");
+							 JSONArray metadataJson=new JSONArray();
+							 metadataJson.add(info);
+							 metadataJson.add(originalData);
+							 contentJson.put("metadata", metadataJson);
+							 ArrayList<Inbox>message_inboxespo=new ArrayList<Inbox>();
+							 message_inboxespo.add(inbox_j);
+							 JSONObject ports=new JSONObject();
+							 
+							 ports.put("out", NetlogoRunner.OutboxToJson(outboxes.get(i)));
+							 ports.put("in", NetlogoRunner.InboxesToJson(message_inboxespo));
+							 contentJson.put("ports", ports);
+							 result=contentJson.toString();
+						 }
 						 message=new ACLNetlogoMessage();
 						 message.setPerformative(ACLMessage.INFORM);
 						 String own_mailbox=agent.getMailBoxName();
@@ -231,10 +293,7 @@ public class NetlogoAgent extends NosAgent
 		{
 			this.myAgent=a;
 		}
-		public void onStart()
-		{
-			//System.out.println("weeeerk");
-		}
+		
 		@Override
 		public void action() {
 			// TODO Auto-generated method stub

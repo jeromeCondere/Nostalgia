@@ -11,6 +11,8 @@ import org.nlogo.lite.InterfaceComponent;
 import org.nlogo.api.CompilerException;
 
 import utils.Netlogo.NetlogoTurtle;
+import utils.box.Inbox;
+import utils.box.Outbox;
 
 
 public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
@@ -290,7 +292,7 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 	{
 		if(turtles==null || turtles.size()==0)
 		{
-			return null;
+			return new JSONArray(); //empty list
 		}
 		JSONArray turtlesJson=new JSONArray();
 		for(int i=0;i<turtles.size();i++)
@@ -301,10 +303,47 @@ public class NetlogoRunner extends GraphicModelRunner implements Cloneable  {
 		
 		return turtlesJson;
 	}
+	public static JSONObject InboxToJson(Inbox inbox)
+	{
+		if(inbox==null)
+			return null;
+		
+		JSONObject InboxJson= new JSONObject();
+		InboxJson.put("name", inbox.getName());
+		InboxJson.put("mailboxName", inbox.getMailboxName());
+		InboxJson.put("user", inbox.getOwnerName());
+		
+		return InboxJson;
+	}
+	public static JSONArray InboxesToJson(ArrayList<Inbox>inboxes)
+	{
+		if(inboxes==null)
+			return null;
+		JSONArray inboxesJson=new JSONArray();
+		for(int i=0;i<inboxes.size();i++)
+		{
+			Inbox inbox=inboxes.get(i);
+			inboxesJson.add(InboxToJson(inbox));
+		}
+		return inboxesJson;
+	}
+	public static JSONObject OutboxToJson(Outbox outbox)
+	{
+		if(outbox==null)
+			return null;
+		
+		JSONObject outboxJson= new JSONObject();
+		outboxJson.put("name", outbox.getName());
+		outboxJson.put("mailboxName", outbox.getMailboxName());
+		//outboxJson.put("user",outbox.getOwnerName());
+		
+		return outboxJson;
+	}
     protected String setNetlogoMessage(ArrayList<NetlogoTurtle> turtles,JSONObject metadata,String comments)
     {
     	JSONArray turtlesJson=TurtlesToJson(turtles);
     	JSONObject messageJson= new JSONObject();
+    	
     	messageJson.put("turtles",turtlesJson);
     	messageJson.put("metadata",metadata);
     	messageJson.put("comments",comments);
