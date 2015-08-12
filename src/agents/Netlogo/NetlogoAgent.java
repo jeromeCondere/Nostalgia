@@ -128,9 +128,24 @@ public class NetlogoAgent extends NosAgent
 		JSONObject ports=(JSONObject) contentJson.get("ports");
 		JSONObject outboxJson=(JSONObject) ports.get("out");
 		String name=(String) outboxJson.get("name");
-		String mailboxname=(String) outboxJson.get("mailboxname");
+		String mailboxname=(String) outboxJson.get("mailboxName");
 		Outbox outbox=new Outbox(name,mailboxname);
 		return outbox;
+	}
+	public static String getOriginalData(JSONObject contentJson)
+	{
+		if(contentJson==null)
+		{
+		return null;
+		}
+		if(contentJson.containsKey("metadata"))
+		{
+		JSONObject metadata=(JSONObject) contentJson.get("metadata");
+		if(metadata!=null && metadata.containsKey("original content"))
+			return (String) metadata.get("original content");
+		}
+		return null;
+		
 	}
 	public static ArrayList<Inbox> getInboxesboxJson(JSONObject contentJson)
 	{
@@ -141,7 +156,7 @@ public class NetlogoAgent extends NosAgent
 		{
 			JSONObject inboxJson=(JSONObject) inboxesJson.get(i);
 			String name=(String) inboxJson.get("name");
-			String mailboxname=(String) inboxJson.get("mailboxname");
+			String mailboxname=(String) inboxJson.get("mailboxName");
 			String user=(String)inboxJson.get("user");
 			Inbox inbox=new Inbox(name,mailboxname);
 			inbox.setOwnerName(user);
@@ -208,15 +223,11 @@ public class NetlogoAgent extends NosAgent
 						 }
 						 catch( Exception e)
 						 {
-							 //the result is not Json
+							 //the result is not regular Json
 							 JSONObject contentJson= new JSONObject();
-							 JSONObject info=new JSONObject();
-							 JSONObject originalData=new JSONObject();
-							 originalData.put("original content",result);
-							 info.put("log", "original object was not json");
-							 JSONArray metadataJson=new JSONArray();
-							 metadataJson.add(info);
-							 metadataJson.add(originalData);
+							 JSONObject metadataJson=new JSONObject();
+							 metadataJson.put("log", "original object was not json");
+							 metadataJson.put("original content",result);
 							 contentJson.put("metadata", metadataJson);
 							 ArrayList<Inbox>message_inboxespo=new ArrayList<Inbox>();
 							 message_inboxespo.add(inbox_j);

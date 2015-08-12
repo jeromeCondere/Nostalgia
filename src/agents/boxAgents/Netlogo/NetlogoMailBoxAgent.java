@@ -9,6 +9,10 @@ import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import agents.NosAgent;
 import agents.Netlogo.NetlogoAgent;
 import agents.boxAgents.MailBoxAgent;
@@ -71,11 +75,22 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	protected void processMessageFromOwner(ACLMessage message)
 	{
 		
-		if(message instanceof ACLNetlogoMessage)
+		if(message.getOntology().equals("inter-Netlogo-Communicate"))
 		{
 		message.clearAllReceiver();
 		message.setDefaultEnvelope();
-		ArrayList<Inbox>inboxes=((ACLNetlogoMessage)message).getInboxes();
+		//ArrayList<Inbox>inboxes=((ACLNetlogoMessage)message).getInboxes();
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObject=null;
+		try {
+			jsonObject = (JSONObject) jsonParser.parse(message.getContent());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ArrayList<Inbox>inboxes=NetlogoAgent.getInboxesboxJson(jsonObject);
+		if(inboxes==null)
+			System.out.println("null inboxes");
 		for(int i=0;i<inboxes.size();i++)
 		{
 			AID aid_receiver=new AID(inboxes.get(i).getMailboxName(),AID.ISLOCALNAME);
@@ -87,13 +102,28 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	}
 	protected void processMessageFromOutside(ACLMessage message)
 	{
-		if(message instanceof ACLNetlogoMessage)//the message comes from a netlogo
+		if(message.getOntology().equals("inter-Netlogo-Communicate"))//the message comes from a netlogo
 	     {
 	    	 ACLNetlogoMessage netlogoMessage=(ACLNetlogoMessage) message;
 	    	 
 	    	 ArrayList<Inbox> inboxes=this.getMailbox().getInboxes();
-	    	 ArrayList<Inbox> message_inboxes=netlogoMessage.getInboxes();
-	    	 Outbox message_Outbox=netlogoMessage.getOutbox();
+	    	 JSONParser jsonParser = new JSONParser();
+	 		JSONObject jsonObject=null;
+	    		 try {
+	    				jsonObject = (JSONObject) jsonParser.parse(message.getContent());
+	    			} catch (ParseException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	    	 
+	    	 ArrayList<Inbox> message_inboxes=NetlogoAgent.getInboxesboxJson(jsonObject);
+	    	 Outbox message_Outbox=NetlogoAgent.getOutboxJson(jsonObject);
+	    	 String originalData=null;
+	    	 if((originalData=NetlogoAgent.getOriginalData(jsonObject))!=null)
+	    	 {
+	    		 message.setContent(originalData);
+	    		 message.setLanguage("");
+	    	 }
 	    	 //we check if one of our inboxes is connected to the outbox of the message
 	    	 for(int i=0;i<message_inboxes.size();i++)
 	    	 {
