@@ -18,6 +18,7 @@ import agents.Netlogo.NetlogoAgent;
 import agents.boxAgents.MailBoxAgent;
 
 import model_runner.communicate.Communicate;
+import utils.Netlogo.NetlogoJson;
 import utils.box.Inbox;
 import utils.box.Mailbox;
 import utils.box.Outbox;
@@ -79,7 +80,6 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 		{
 		message.clearAllReceiver();
 		message.setDefaultEnvelope();
-		//ArrayList<Inbox>inboxes=((ACLNetlogoMessage)message).getInboxes();
 		JSONParser jsonParser = new JSONParser();
 		JSONObject jsonObject=null;
 		try {
@@ -88,7 +88,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		ArrayList<Inbox>inboxes=NetlogoAgent.getInboxesboxJson(jsonObject);
+		ArrayList<Inbox>inboxes=NetlogoJson.getInboxesboxJson(jsonObject);
 		if(inboxes==null)
 			System.out.println("null inboxes");
 		for(int i=0;i<inboxes.size();i++)
@@ -104,7 +104,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	{
 		if(message.getOntology().equals("inter-Netlogo-Communicate"))//the message comes from a netlogo
 	     {
-	    	 ACLNetlogoMessage netlogoMessage=(ACLNetlogoMessage) message;
+	    	 
 	    	 
 	    	 ArrayList<Inbox> inboxes=this.getMailbox().getInboxes();
 	    	 JSONParser jsonParser = new JSONParser();
@@ -116,14 +116,10 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 	    				e.printStackTrace();
 	    			}
 	    	 
-	    	 ArrayList<Inbox> message_inboxes=NetlogoAgent.getInboxesboxJson(jsonObject);
-	    	 Outbox message_Outbox=NetlogoAgent.getOutboxJson(jsonObject);
+	    	 ArrayList<Inbox> message_inboxes=NetlogoJson.getInboxesboxJson(jsonObject);
+	    	 Outbox message_Outbox=NetlogoJson.getOutboxJson(jsonObject);
 	    	 String originalData=null;
-	    	 if((originalData=NetlogoAgent.getOriginalData(jsonObject))!=null)
-	    	 {
-	    		 message.setContent(originalData);
-	    		 message.setLanguage("");
-	    	 }
+	    	 
 	    	 //we check if one of our inboxes is connected to the outbox of the message
 	    	 for(int i=0;i<message_inboxes.size();i++)
 	    	 {
