@@ -41,13 +41,13 @@ public void addOutputConnection(String OutBoxName,String InboxName,String mailbo
    {
 	   this.addOutbox(OutBoxName);
    }
-      int index=  outboxes.indexOf(outbox);
+      int index=outboxes.indexOf(outbox);
 	 outboxes.get(index).addInbox(new Inbox(InboxName,mailbox));
 	 //outbox>(inbox,mailbox)
 }
 public void addOutputConnection(String OutBoxName,String InboxName,NosAgent agent)//connect the outbox to an inbox
 {
-	//we must specify maibox because two inboxes can have the same name but different mailboxes
+	//we must specify mailbox because two inboxes can have the same name but different mailboxes
 	if(agent==null)
 		return;
 	
