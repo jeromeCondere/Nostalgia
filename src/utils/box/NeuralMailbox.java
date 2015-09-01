@@ -35,6 +35,11 @@ public class NeuralMailbox extends Mailbox {
 			neural_inbox.setWeight(weight);
 		}
 	}
+	public void setInboxWeight(String InboxName,float weight)
+	{
+		NeuralInbox inbox=new NeuralInbox(InboxName,this.mailboxName);
+		setInboxWeight(inbox, weight);
+	}
 	
 	public void addOutputConnection(String OutBoxName,String InboxName,NosAgent agent)//connect the outbox to an inbox
 	{
@@ -42,13 +47,13 @@ public class NeuralMailbox extends Mailbox {
 		if(agent==null)
 			return;
 		
-	   Outbox outbox=new Outbox(OutBoxName,this.mailboxName);
+		NeuralOutbox outbox=new NeuralOutbox(OutBoxName,this.mailboxName);
 	   if(!outboxes.contains(outbox))
 	   {
 		   this.addOutbox(OutBoxName);
 	   }
-	     int index=  outboxes.indexOf(outbox);
-	     Inbox inbox=new Inbox(InboxName,agent.getMailBoxName());
+	     int index=outboxes.indexOf(outbox);
+	     NeuralInbox inbox=new NeuralInbox(InboxName,agent.getMailBoxName());
 	     inbox.setOwnerName(agent.getAgentName());//we specify the owner of the inbox
 		 outboxes.get(index).addInbox(inbox);
 		 //outbox>(inbox,mailbox)
@@ -59,12 +64,12 @@ public class NeuralMailbox extends Mailbox {
 		
 		if(agent==null)
 			return;
-		Inbox inbox=new Inbox(InboxName,this.mailboxName);
+		NeuralInbox inbox=new NeuralInbox(InboxName,this.mailboxName);
 		if(!inboxes.contains(inbox))
 			this.addInbox(InboxName);
 		
 		int index=inboxes.indexOf(inbox);
-		Outbox outbox=new Outbox(OutboxName,agent.getMailBoxName());
+		NeuralOutbox outbox=new NeuralOutbox(OutboxName,agent.getMailBoxName());
 		outbox.setOwnerName(agent.getAgentName());
 		inboxes.get(index).addOutbox(outbox);
 		//inbox<(outbox,mailbox)

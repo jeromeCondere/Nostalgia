@@ -15,7 +15,7 @@ public class NeuralInbox extends Inbox {
 	public float getWeight() {
 		return weight;
 	}
-	protected void setWeight(float weigth) {
+	public void setWeight(float weigth) {
 		 this.weight=weigth;
 	}
 	
