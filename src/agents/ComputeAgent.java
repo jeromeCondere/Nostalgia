@@ -1,7 +1,6 @@
-package agents.Netlogo;
+package agents;
 
 import jade.lang.acl.ACLMessage;
-import agents.NosAgent;
 
 public abstract class ComputeAgent extends NosAgent {
 	public abstract void compute(ACLMessage messageOrder);

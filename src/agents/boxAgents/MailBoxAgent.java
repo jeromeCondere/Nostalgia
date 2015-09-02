@@ -11,7 +11,7 @@ import jade.lang.acl.ACLMessage;
 
 public class MailBoxAgent extends Agent {
 	
-	private Mailbox mailbox; 
+	protected Mailbox mailbox; 
 	protected Agent owner;
  
  	public MailBoxAgent(Agent owner)

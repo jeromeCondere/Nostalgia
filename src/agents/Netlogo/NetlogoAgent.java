@@ -277,10 +277,6 @@ public class NetlogoAgent extends NosAgent
 			}
 			
 		}
-		
-
-		
-		
 	}
 	
 	protected class Start extends OneShotBehaviour

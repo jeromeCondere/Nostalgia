@@ -35,7 +35,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 		String mailboxname="mailbox_"+ownername;
 		Mailbox mailbox_=new Mailbox(mailboxname);
 		mailbox_.setOwnerName(ownername);
-		this.setMailbox(new Mailbox(mailboxname));
+		this.setMailbox(mailbox_);
 	}
 	protected void setup()
 	{
