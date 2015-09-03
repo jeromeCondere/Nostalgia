@@ -1,6 +1,8 @@
 package agents.boxAgents.Neural;
 
+
 import utils.box.Mailbox;
+import utils.stimuli.StimuliPool;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import agents.Netlogo.NetlogoAgent;
@@ -8,6 +10,7 @@ import agents.boxAgents.MailBoxAgent;
 
 public class NeuralMailboxAgent extends MailBoxAgent {
 	protected String ownername=null;
+	protected StimuliPool stimuliPool=null;
 	public NeuralMailboxAgent(NetlogoAgent owner)
 	{
 		super(owner);
@@ -28,9 +31,7 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 	
 	protected boolean isAllPortsfilled()
 	{
-		int numPortsIn=this.mailbox.getInboxes().size();
-		if(numPortsIn>this.getCurQueueSize())
-			return false;
+		
 		
 		
 		return false;
