@@ -5,7 +5,9 @@ import utils.box.Inbox;
 
 public class SingleStimuli {
 private Inbox inbox;
+
 private ACLMessage message;
+
 public SingleStimuli(Inbox inbox,ACLMessage message)
 {
 	this.inbox=inbox;
@@ -14,6 +16,9 @@ public SingleStimuli(Inbox inbox,ACLMessage message)
 public SingleStimuli(Inbox inbox)
 {
 	this.inbox=inbox;
+}
+public ACLMessage getMessage() {
+	return message;
 }
 public void clear()
 {
@@ -27,6 +32,10 @@ public void setStimuli(ACLMessage message)
 {
 	this.message=message;
 }
+public Inbox getInbox() {
+	return inbox;
+}
+
 public boolean equals(Object obj)
 {
     // Vérification de l'égalité des références
