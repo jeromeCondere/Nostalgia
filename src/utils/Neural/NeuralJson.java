@@ -25,6 +25,7 @@ public class NeuralJson
 		Outbox outbox=new Outbox(name,mailboxname);
 		return outbox;
 	}
+	
 	public static JSONObject getSingleStimuliJson(String content)
 	{
 		try{
@@ -68,8 +69,39 @@ public class NeuralJson
 		}
 		return  stimuliArrayJson;
 	}
-	public static String setMessageJson()
+/*	public static JSONArray getInboxesJSonObj(ArrayList<Inbox>inboxes)
+	{
+		JSONArray inboxesObj=new JSONArray();
+		for(Inbox inbox:inboxes)
+		{
+			inboxesObj.
+		}
+		return null;
+	}
+	*/
+	public static JSONObject getPortsJSonObj()
 	{
 		return null;
+	}
+	/*
+	 * the form of the Json message that the neural agent will receive is
+	 * {
+	 *  metadata:{}
+	 *  stimuli:[ {in: `inbox_1 info`, single stimuli : {`single stimuli_1 info`} },...
+	 *              ...,{in: `inbox_n info`, single stimuli : {`single stimuli_n info`} }
+	 *  
+	 *    ]
+	 *  
+	 * }
+	 */
+	public static String setMessageInJson(ArrayList<Inbox>inboxes,StimuliPool stimuliPool,JSONObject metadata)
+	{
+		JSONObject object =new JSONObject();
+		JSONObject ports =new JSONObject();
+		JSONArray stimuli=StimuliToJson(stimuliPool);
+		object.put("ports", ports);
+		object.put("stimuli", stimuli);
+		object.put("metadata", metadata);
+		return object.toString();
 	}
 }

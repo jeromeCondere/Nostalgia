@@ -8,6 +8,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import utils.Netlogo.NetlogoJson;
+import utils.Neural.NeuralJson;
 import utils.box.Inbox;
 import utils.box.Mailbox;
 import utils.box.NeuralMailbox;
@@ -78,17 +79,17 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 	{	
 		return stimuliPool.isFilled();
 	}
-	protected void StimuliMerge()
+	protected void StimuliMergeAndSend()
 	{
 		/*
-		 * merge all messages from stimuli pool and send 
+		 * merge all messages from stimuli pool int one and send to the owner of the mailbox
 		 */
-		ArrayList<ACLMessage> messages=stimuliPool.getMessages();
+		ACLMessage message=new ACLMessage(ACLMessage.INFORM);
+		AID aid_receiver=new AID(this.ownername,AID.ISLOCALNAME);
+		message.addReceiver(aid_receiver);
+		String content= NeuralJson.setMessageInJson(mailbox.getInboxes(),stimuliPool,null);
+		message.setContent(content);
 		
-		for(ACLMessage message:messages)
-		{
-			
-		}
 	}
 	protected void process()
 	{
@@ -117,6 +118,7 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 			 * we merge the message of the stimili pool and we send it 
 			 * to the owner
 			 */
+			StimuliMergeAndSend();
 		}
 		
 	}
