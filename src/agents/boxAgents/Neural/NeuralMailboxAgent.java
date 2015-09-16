@@ -84,6 +84,11 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 		 * merge all messages from stimuli pool and send 
 		 */
 		ArrayList<ACLMessage> messages=stimuliPool.getMessages();
+		
+		for(ACLMessage message:messages)
+		{
+			
+		}
 	}
 	protected void process()
 	{

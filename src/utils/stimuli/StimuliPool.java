@@ -22,6 +22,10 @@ public StimuliPool(ArrayList<Inbox>inboxes)
 		pool.add(new SingleStimuli(inbox,null));
 	}
 }
+public ArrayList<SingleStimuli> getPool()
+{
+	return pool;
+}
 public ArrayList<ACLMessage> getMessages()
 {
 	ArrayList<ACLMessage> messages=new ArrayList<ACLMessage>();
