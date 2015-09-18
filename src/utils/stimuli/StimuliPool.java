@@ -66,4 +66,11 @@ public void setStimuliMessage(Inbox inbox,ACLMessage message)
 		pool.get(index).setStimuli(message);
 	}
 }
+public void clear()
+{
+	for(SingleStimuli s:pool)
+	{
+		s.clear();
+	}
+}
 }

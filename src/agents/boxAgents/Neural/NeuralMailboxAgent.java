@@ -14,15 +14,21 @@ import utils.box.Mailbox;
 import utils.box.NeuralMailbox;
 import utils.stimuli.StimuliPool;
 import jade.core.AID;
+import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import agents.NeuralAgent;
 import agents.Netlogo.NetlogoAgent;
 import agents.boxAgents.MailBoxAgent;
+import agents.boxAgents.Netlogo.NetlogoMailBoxAgent;
+
 
 public class NeuralMailboxAgent extends MailBoxAgent {
 	protected String ownername=null;
 	protected StimuliPool stimuliPool=null;
-	public NeuralMailboxAgent(NetlogoAgent owner)
+	protected int fps=120;
+	public NeuralMailboxAgent(NeuralAgent owner)
 	{
 		super(owner);
 		ownername=owner.getAgentName();
@@ -32,6 +38,19 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 		this.mailbox=mailbox_;
 		stimuliPool=new StimuliPool(mailbox.getInboxes());
 	}
+	
+	public int getFps() {
+		return fps;
+	}
+	public void setFps(int fps) {
+		this.fps = fps;
+	}
+	protected void setup()
+	{
+		
+	    this.addBehaviour(new MainLoop(this,1000/fps));
+	}
+	
 	protected void processMessageFromOwner(ACLMessage message)
 	{
 		if(message.getOntology().equals("inter-Neural-Communicate"))
@@ -57,10 +76,6 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 		message.setSender(this.getAID());
 		send(message);
 		}
-	}
-	protected void processMessageFromOutside(ACLMessage message)
-	{
-	
 	}
 	
 	private void fillStimuliPool(ArrayList<Inbox>inboxesNotFilled)
@@ -88,6 +103,8 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 		AID aid_receiver=new AID(this.ownername,AID.ISLOCALNAME);
 		message.addReceiver(aid_receiver);
 		String content= NeuralJson.setMessageInJson(mailbox.getInboxes(),stimuliPool,null);
+		message.setOntology("inter-Neural-Communicate");
+		message.setLanguage("json");
 		message.setContent(content);
 		
 	}
@@ -119,7 +136,27 @@ public class NeuralMailboxAgent extends MailBoxAgent {
 			 * to the owner
 			 */
 			StimuliMergeAndSend();
+			//we clear the stimuli pool
+			this.stimuliPool.clear();
 		}
 		
 	}
+	
+	
+	protected class MainLoop extends TickerBehaviour
+	{
+
+		public MainLoop(Agent a, long period) {
+			super(a, period);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void onTick() {
+			// TODO Auto-generated method stub
+			((NeuralMailboxAgent) myAgent).process();
+		}
+		
+	}
+	
 }

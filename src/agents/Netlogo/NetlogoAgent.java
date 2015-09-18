@@ -54,7 +54,6 @@ public class NetlogoAgent extends NosAgent
 		this.name=name;
 		net=runner;
 		this.mailboxAgent=new NetlogoMailBoxAgent(this);
-		
 	}
 	
 	
@@ -256,6 +255,7 @@ public class NetlogoAgent extends NosAgent
 			if(net instanceof NetlogoCommunicate)
 			{
 			ACLMessage message =receive();
+			
 			if(message!=null && message.getSender().equals(mailboxAgent.getAID()))
 			{
 				if(message.getOntology().equals(("inter-Netlogo-Communicate")))
