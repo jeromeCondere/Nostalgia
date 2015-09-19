@@ -2,9 +2,16 @@ package agents;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import model_runner.Neural.NeuralRunner;
+
 
 import agents.boxAgents.Neural.NeuralMailboxAgent;
 
+import utils.Neural.NeuralData;
 import utils.box.Inbox;
 import utils.box.NeuralInbox;
 
@@ -20,11 +27,16 @@ public abstract class NeuralAgent extends NosAgent
 {
  protected float bias=0;
  protected int fps=30;
-
+ protected NeuralRunner runner;
  public NeuralAgent(String name)
  {
 	 this.name=name;
 	 this.mailboxAgent=new NeuralMailboxAgent(this);
+ }
+ public NeuralAgent(String name,NeuralRunner runner)
+ {
+	 this(name);
+	 this.runner=runner;
  }
  
 protected abstract ACLMessage sum(ArrayList<ACLMessage> message);
@@ -93,14 +105,51 @@ protected class MainLoop extends TickerBehaviour
 		{
 			if(message.getSender().equals(mailboxAgent.getAID()))
 			{
-				
+				this.treatFromMailbox(message);
 			}
 		}
 		
 	}
 	protected void treatFromMailbox(ACLMessage message)
 	{
+		NeuralAgent agent=((NeuralAgent)this.myAgent);
+		ArrayList<NeuralData> neuralDatum=getNeuralDataFromMessage(message);
+		NeuralData dataSum=agent.runner.sum(neuralDatum);
+		NeuralData dataToSend=agent.runner.transfert(dataSum, bias);
+		//we always send something
 		
+		//we send to all the inboxes of the outboxes
+			
+	}
+	protected ArrayList<NeuralData> getNeuralDataFromMessage(ACLMessage message)
+	{
+		String content=message.getContent();
+		try{
+			ArrayList<NeuralData> datum=new ArrayList<NeuralData>();
+			JSONParser jsonParser = new JSONParser();
+			JSONObject object =(JSONObject) jsonParser.parse(content);
+			JSONArray stimuliArray=(JSONArray) object.get("stimuli");
+			for(int i=0;i<stimuliArray.size();i++)
+			{
+				JSONObject stimuliObj=(JSONObject) stimuliArray.get(i);
+				JSONObject singleStimuli=(JSONObject) stimuliObj.get("single stimuli");
+				JSONObject inboxJson=(JSONObject) stimuliObj.get("in");
+				
+				String inboxName=(String) inboxJson.get("name");
+				float weight= ((Number)inboxJson.get("weight")).floatValue();
+				float value= ((Number)singleStimuli.get("value")).floatValue();
+				String singleStimuliContent=(String) singleStimuli.get("content");
+				NeuralData data=new NeuralData(inboxName,singleStimuliContent,value,weight);
+				datum.add(data);
+			}
+			return datum;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 }
