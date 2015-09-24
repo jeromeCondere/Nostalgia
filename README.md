@@ -10,13 +10,13 @@ We use *Jade* (http://jade.tilab.com/)  which is framework implemented in java t
 
 ###the main goal
 
-The main goal of Nostalgia is to provide tools for multi modeling in order to develop multi modeling system easier.
+The main goal of Nostalgia is to provide tools for multi modeling in order to develop multi modeling systems easier.
 Multi modeling can be very useful because it consist to interact several agents called model agents that run programs
 called model in order to simulate collective phenomena.The main purpose of creating multi modeling system is to study
 the influence of a set of models over one or several models.  
 Nostalgia use is specialized on multi modeling based on *Netlogo* (https://ccl.northwestern.edu/netlogo/)
 
-### other goals
+### other goal
 
 Another goal of nostalgia is to implement tool for DAI (distributed artificial intelligence) especially with
 neural networks.
