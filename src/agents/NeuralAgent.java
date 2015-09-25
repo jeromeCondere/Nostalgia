@@ -11,9 +11,11 @@ import model_runner.Neural.NeuralRunner;
 
 import agents.boxAgents.Neural.NeuralMailboxAgent;
 
+import utils.Netlogo.NetlogoJson;
 import utils.Neural.NeuralData;
 import utils.box.Inbox;
 import utils.box.NeuralInbox;
+import utils.box.Outbox;
 
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -105,7 +107,12 @@ protected class MainLoop extends TickerBehaviour
 		{
 			if(message.getSender().equals(mailboxAgent.getAID()))
 			{
-				this.treatFromMailbox(message);
+		     this.treatFromMailbox(message);
+			}
+			else 
+			{
+				//message comes from a stimuli generator
+				
 			}
 		}
 		
@@ -119,7 +126,42 @@ protected class MainLoop extends TickerBehaviour
 		//we always send something
 		
 		//we send to all the inboxes of the outboxes
+		ArrayList<Outbox>outboxes=agent.mailboxAgent.getMailbox().getOutboxes();
+		for(int i=0;i<outboxes.size();i++)
+		{
 			
+			ArrayList<Inbox> inboxes_of_external_mailbox=outboxes.get(i).getInBoxes();
+			for(int j=0;j<inboxes_of_external_mailbox.size();j++)
+			{
+				NeuralInbox inbox_j=(NeuralInbox)inboxes_of_external_mailbox.get(j);
+				ACLMessage messageToSend=makeMessage(outboxes.get(i),inbox_j,dataToSend);
+				send(messageToSend);
+			}
+		}
+			
+	}
+	protected ACLMessage makeMessage(Outbox outbox,NeuralInbox inbox,NeuralData dataToSend)
+	{
+		ArrayList<Inbox>inboxes=new ArrayList<Inbox>();
+		 inboxes.add(inbox);
+		JSONObject jsonContent=new JSONObject();
+		JSONObject ports=new JSONObject();
+		 ports.put("out", NetlogoJson.OutboxToJson(outbox));
+		 ports.put("in", NetlogoJson.InboxesToJson(inboxes));
+		 
+		 JSONObject singleStimuliJson=new JSONObject();
+		 singleStimuliJson.put("value", dataToSend.getValue());
+		 singleStimuliJson.put("content",dataToSend.getContent());
+		 
+		 jsonContent.put("ports", ports);
+		 jsonContent.put("single stimuli",singleStimuliJson);
+		 
+		 ACLMessage message=new ACLMessage(ACLMessage.INFORM);
+		 message.addReceiver(mailboxAgent.getAID());
+		 message.setOntology("inter-Neural-Communicate");
+		 message.setLanguage("json");
+		 message.setContent(jsonContent.toString());
+		return message;
 	}
 	protected ArrayList<NeuralData> getNeuralDataFromMessage(ACLMessage message)
 	{
