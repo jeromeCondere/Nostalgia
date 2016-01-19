@@ -1,6 +1,6 @@
 ## What is Nostalgia ?
 
-Nostalgia is a project that provides tools in order to program MAS which mean multi agent system, MAS are often used in distributed 
+Nostalgia is a project that provides tools in order to program MAS which means multi agent system, MAS are often used in distributed 
 artificial intelligence system or distributed computing system.  
 Indeed an MAS is a platform that provides tools for asynchronous communication, the atoms of such systems are called 
 agents and it is very important to give a definition of this concept. An agent is a computional entity that is
