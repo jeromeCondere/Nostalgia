@@ -21,6 +21,9 @@ Nostalgia use is specialized on multi modeling based on *Netlogo* (https://ccl.n
 Another goal of nostalgia is to implement tools for DAI (distributed artificial intelligence) especially with
 neural networks.
 
+## future work
+Developping tools for data farming
+
 
 
 
