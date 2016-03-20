@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import NosException.CheckMessageException;
 import agents.NosAgent;
 import agents.boxAgents.Netlogo.NetlogoMailBoxAgent;
 
@@ -15,6 +16,9 @@ import utils.box.Inbox;
 import utils.box.Outbox;
 import utils.box.SubBox;
 import utils.communication.message.ACLNetlogoMessage;
+import utils.communication.message.MessageChecker;
+import utils.communication.message.Netlogo.NetlogoInputMessageChecker;
+import utils.communication.message.Netlogo.NetlogoOutputMessageChecker;
 
 import model_runner.communicate.Communicate;
 import model_runner.communicate.Netlogo.NetlogoCommunicate;
@@ -35,6 +39,11 @@ public class NetlogoAgent extends NosAgent
 {
     protected  int fps=1;//default max frame rate
 	protected NetlogoRunner net;
+	private JSONParser jsonParser = new JSONParser();
+	
+	// controller for input message (from the mailboxAgent)
+	private MessageChecker checkControllerIn=new NetlogoInputMessageChecker();
+	private MessageChecker checkControllerOut=new NetlogoOutputMessageChecker();
 	public NetlogoAgent()
 	{
 		this.mailboxAgent=new NetlogoMailBoxAgent(this);
@@ -141,12 +150,16 @@ public class NetlogoAgent extends NosAgent
       protected void treatNetlogoCommunicateMessage(ACLMessage message)
       {
     	  NetlogoCommunicate netCom=(NetlogoCommunicate) net;
-    	  JSONParser jsonParser = new JSONParser();
+    	  
   		JSONObject jsonObject=null;
-  		try {
-  			jsonObject = (JSONObject) jsonParser.parse(message.getContent());
-  		} catch (ParseException e) {
-  			// TODO Auto-generated catch block
+  		try 
+  		{
+  			//check the message and return the json Object
+  			Object []params={jsonParser};
+  			jsonObject=(JSONObject) checkControllerIn.check(message,params);
+  		}
+  		catch(CheckMessageException e)
+  		{
   			e.printStackTrace();
   		}
     	  ArrayList<Inbox> inboxes=NetlogoJson.getInboxesboxJson(jsonObject);
@@ -173,33 +186,15 @@ public class NetlogoAgent extends NosAgent
 		  String own_mailbox=agent.getMailBoxName();
 		  AID own_mailbox_aid=new AID(own_mailbox,AID.ISLOCALNAME);
 		  message.addReceiver(own_mailbox_aid);
-		  
-
-			 try{
-				 JSONParser jsonParser = new JSONParser();
-				 JSONObject jsonObject = (JSONObject) jsonParser.parse(content);
-				 JSONObject ports=new JSONObject();
-				 ports.put("out", NetlogoJson.OutboxToJson(outbox));
-				 ports.put("in", NetlogoJson.InboxesToJson(inboxes));
-				 jsonObject.put("ports", ports);					 
-				 message.setContent(jsonObject.toString());
-				 return message;
-			 }
-			 catch( Exception e)
-			 {
-				 //the result is not regular Json
-				 JSONObject contentJson= new JSONObject();
-				 JSONObject metadataJson=new JSONObject();
-				 metadataJson.put("log", "original object was not json");
-				 metadataJson.put("original content",content);
-				 contentJson.put("metadata", metadataJson);
-				 JSONObject ports=new JSONObject();
-				 ports.put("out", NetlogoJson.OutboxToJson(outbox));
-				 ports.put("in", NetlogoJson.InboxesToJson(inboxes));
-				 contentJson.put("ports", ports);
-				 message.setContent(contentJson.toString());
-				 return message;
-			 }
+		  Object[] params={outbox,inboxes,content,jsonParser};
+		  try {
+			checkControllerOut.check(message, params);
+			return message;
+		} catch (CheckMessageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			 return null;
 		  
 		  
 		  
@@ -229,11 +224,6 @@ public class NetlogoAgent extends NosAgent
 					//treatOutbox -> send output
 					 if(result!=null && !result.equals(""))
 					 {
-						 //boolean isJson=true;
-						 
-						 
-						 
-						 
 						 ArrayList<Inbox>message_inboxes=new ArrayList<Inbox>();
 						 
 						 message_inboxes.add(inbox_j);

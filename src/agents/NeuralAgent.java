@@ -161,6 +161,7 @@ protected class MainLoop extends TickerBehaviour
 		 message.setOntology("inter-Neural-Communicate");
 		 message.setLanguage("json");
 		 message.setContent(jsonContent.toString());
+		 
 		return message;
 	}
 	protected ArrayList<NeuralData> getNeuralDataFromMessage(ACLMessage message)
@@ -223,8 +224,9 @@ protected class End	extends OneShotBehaviour
 		// TODO Auto-generated method stub
 		
 		System.out.println(this.myAgent.getLocalName()+" is ending ");
-		this.myAgent.doDelete();
+		
 		mailboxAgent.doDelete();
+		this.myAgent.doDelete();
 	}
 	
 	
