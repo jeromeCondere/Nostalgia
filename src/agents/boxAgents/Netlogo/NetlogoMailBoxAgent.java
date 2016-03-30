@@ -27,6 +27,7 @@ import utils.communication.message.ACLNetlogoMessage;
 
 public class NetlogoMailBoxAgent extends MailBoxAgent {
 	protected String ownername=null;
+	private JSONParser jsonParser = new JSONParser();
 
 	public NetlogoMailBoxAgent(NetlogoAgent owner) 
 	{
@@ -80,7 +81,7 @@ public class NetlogoMailBoxAgent extends MailBoxAgent {
 		{
 		message.clearAllReceiver();
 		message.setDefaultEnvelope();
-		JSONParser jsonParser = new JSONParser();
+		
 		JSONObject jsonObject=null;
 		try {
 			jsonObject = (JSONObject) jsonParser.parse(message.getContent());

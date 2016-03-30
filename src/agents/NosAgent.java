@@ -9,21 +9,18 @@ import utils.communication.message.ACLNosMessage;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
 public abstract class NosAgent extends Agent {
 	protected MailBoxAgent mailboxAgent=null;
 	//two outboxes can't have the same name and the same user
 	//two inboxes  can't have the same name and the same user
 	protected String name=null;
-	public void forward(ACLNosMessage message)
+	public void forward(ACLMessage message)
 	{
 		if(message==null)
 			return;
-		String receiver=message.popForwarder();
-		AID receiver_aid=new AID(receiver,AID.ISLOCALNAME);
-		message.setSender(this.getAID());
-		message.addReceiver(receiver_aid);
-		send(message);
+		
 	}
 	public String getAgentName()
 	{
