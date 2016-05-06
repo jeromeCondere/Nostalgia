@@ -63,9 +63,38 @@ public class JsonUtilsTest {
 		assertEquals("error on ontology",null,jsonMessage2.get("ontology"));
 		assertEquals("error on protocol",null,jsonMessage2.get("protocol"));
 
-		int performativeJson2 = ((Number) jsonMessage.get("performative")).intValue();
-		assertEquals("error on performative",ACLMessage.CANCEL,performativeJson2);
+		int performativeJson2 = ((Number) jsonMessage2.get("performative")).intValue();
+		assertEquals("error on performative",ACLMessage.CONFIRM,performativeJson2);
 		
+		
+	}
+	@Test
+	public void TestCreateMessageFromJson()
+	{
+		String content = "content";
+		String conversation_id="c_id";
+		String in_reply_to= "irl";
+		String language="C";
+		String encoding="encoding";
+		String ontology="e";
+		String protocol="protocol";
+		
+		ACLMessage message =new ACLMessage(ACLMessage.CANCEL);
+		message.setContent(content);
+		message.setConversationId(conversation_id);
+		message.setInReplyTo(in_reply_to);
+		message.setLanguage(language);
+		message.setEncoding(encoding);
+		message.setOntology(ontology);
+		message.setProtocol(protocol);
+		
+		JSONObject jsonMessage = JsonUtils.TransformMessageToJson(message);
+		ACLMessage messageBis = JsonUtils.transformJsonToMessage(jsonMessage);
+		
+		if(messageBis.equals(message))
+		{
+			fail("the two messages are not the same");
+		}
 		
 	}
 }
