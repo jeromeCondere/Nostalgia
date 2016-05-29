@@ -16,12 +16,7 @@ public abstract class NosAgent extends Agent {
 	//two outboxes can't have the same name and the same user
 	//two inboxes  can't have the same name and the same user
 	protected String name=null;
-	public void forward(ACLMessage message)
-	{
-		if(message==null)
-			return;
-		
-	}
+	
 	public String getAgentName()
 	{
 		return this.name;

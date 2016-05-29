@@ -29,6 +29,9 @@ import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.Envelope;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
@@ -84,7 +87,29 @@ public class NetlogoAgent extends NosAgent
 		super.Copy(netAgent);
 	}
 	
-	
+	protected void register()
+	{
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		
+		try {
+			DFService.register(this, dfd);
+			}
+			catch (FIPAException fe) {
+			fe.printStackTrace();
+			}
+	}
+	protected void deregister()
+	{
+		try 
+		{
+			DFService.deregister(this);
+		}
+		catch (FIPAException fe) 
+		{
+		fe.printStackTrace();
+		}
+	}
 	protected void setup() 
     {
 
@@ -120,6 +145,7 @@ public class NetlogoAgent extends NosAgent
 		}
 	
 		
+		register();
 	   	long period=1000/fps;
 		SequentialBehaviour SequentialExec = new SequentialBehaviour();
 		SequentialExec.addSubBehaviour(new Start(this));
@@ -302,6 +328,7 @@ public class NetlogoAgent extends NosAgent
 			// TODO Auto-generated method stub
 			net.endModel();
 			System.out.println(net.getName() +" has stopped ");
+			((NetlogoAgent)this.myAgent).deregister();
 			this.myAgent.doDelete();
 			mailboxAgent.doDelete();
 		}

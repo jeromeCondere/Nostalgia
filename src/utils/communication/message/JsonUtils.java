@@ -74,19 +74,13 @@ public class JsonUtils {
 		String ontology=(String) jsonMessage.get("ontology");
 		String protocol=(String) jsonMessage.get("protocol");
 		
-		String sender_str = (String) jsonMessage.get("sender");
-		AID sender_aid=new AID (sender_str,true);
+		//String sender_str = (String) jsonMessage.get("sender");
+		//AID sender_aid=new AID (sender_str,true);
 		
-		ACLMessage message = null;
-		if(((Number) jsonMessage.get("performative"))!=null)
-			{
+		ACLMessage message;
 			int performative = ((Number) jsonMessage.get("performative")).intValue();
 			message = new ACLMessage(performative);
-			}
-		else
-		{
-			message = new ACLMessage();
-		}
+
 		message.setContent(content);
 		message.setConversationId(conversation_id);
 		message.setInReplyTo(in_reply_to);
@@ -94,7 +88,7 @@ public class JsonUtils {
 		message.setEncoding(encoding);
 		message.setOntology(ontology);
 		message.setProtocol(protocol);
-		message.setSender(sender_aid);
+		//message.setSender(sender_aid);
 		
 		
 		return message;
