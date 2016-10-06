@@ -60,7 +60,7 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 					cmd+="create-turtles 1 [ ";
 					cmd+="set size 3 ";
 					cmd+="setxy "+(turtle.getX()+eps)+" random-pycor ";
-					cmd+=" ]";
+					cmd+=" ] \n";
 				}
 				this.NetlogoCmd(cmd);
 			} catch (Exception e) {
@@ -77,8 +77,9 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 		// TODO Auto-generated method stub
 		if(outbox.equals("out1"))
 		{
-			ArrayList <NetlogoTurtle>turtles= RightBorder(15);
+			ArrayList <NetlogoTurtle>turtles = RightBorder(15);
 			
+			if(!turtles.isEmpty())
 			return NetlogoJson.setNetlogoMessage(turtles, null, "eh");
 		//return "yolo1";
 		}
@@ -92,7 +93,7 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 	{
 		ArrayList<Long> index_turtles = new ArrayList<Long>();
 		ArrayList<NetlogoTurtle> turtles = new ArrayList<NetlogoTurtle>();
-		AgentSet walkers = (AgentSet)report ("turtles with [xcor > (max-pxcor - "+eps+") ]");
+		AgentSet walkers = (AgentSet)report ("turtles with [xcor >  (max-pxcor - "+eps+") ]");
 		for(int i=0;i<walkers.count();i++)
 		{
 			Turtle item=(Turtle) walkers.agent(i);
@@ -101,6 +102,11 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 			turtles.add(turtle);
 		}
 		removeTurtles(index_turtles);
+		if(turtles.size() > 0)
+		{
+			System.out.println("zidnzioe");
+		}
+
 		return turtles;
 		
 	}
@@ -111,7 +117,7 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 	{
 		ArrayList<Long> index_turtles =new ArrayList<Long>();
 		ArrayList<NetlogoTurtle> turtles=new ArrayList<NetlogoTurtle>();
-		AgentSet walkers = (AgentSet)report ("turtles with [xcor > (max-pxcor - "+eps+") ]");
+		AgentSet walkers = (AgentSet)report ("turtles with [xcor  < "+eps+" ]");
 		for(int i=0;i<walkers.count();i++)
 		{
 			Turtle item=(Turtle) walkers.agent(i);
@@ -120,6 +126,13 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 			turtles.add(turtle);
 		}
 		removeTurtles(index_turtles);
+		if(turtles.size() > 0)
+		{
+			System.out.println("zidnzioe");
+		}
+		else {
+			System.out.println("noooo");
+		}
 		return turtles;
 		
 	}

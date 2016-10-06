@@ -1,5 +1,8 @@
 package exemples.NetlogoExchange;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
@@ -38,7 +41,7 @@ public class NetlogoExchange {
 	    agt2.addOutputConnection("out2","in1",agt1);//agt2(out2)> agt1(in1)
 	    agt1.addInputConnection("in1","out2", agt2);//agt1(in1) < agt2(out2)
 	    // agt2 ------> agt1
-	    
+	   
 		
 		try {
 			AgentController rma = myContainer.createNewAgent("rma", "jade.tools.rma.rma", null);
