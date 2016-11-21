@@ -7,7 +7,7 @@ public class Inbox extends Box{
 private ArrayList<Outbox> outboxes=null;
 public Inbox(String name, String mailboxName) {
 		super(name, mailboxName);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-gnated constructor stub
 	}
 public ArrayList<Outbox> getOutBoxes()
 {

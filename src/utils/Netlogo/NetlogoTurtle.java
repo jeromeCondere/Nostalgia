@@ -18,6 +18,8 @@ protected float y=0.0f;
 protected float z=0.0f;
 protected Color color=new Color(255,255,255);
 protected float orientation=0.0f;
+protected float size=1f;
+
 public NetlogoTurtle()
 {
 	
@@ -27,7 +29,7 @@ public NetlogoTurtle(Turtle t)
 	x=(float) t.xcor();
 	y=(float) t.ycor();
 	orientation= (float) t.heading();
-	
+	size=(float) t.size();
 	shape=t.shape();
 	color=org.nlogo.api.Color.getColor(t.color());
 	if(!t.getBreed().printName().equals("TURTLES"))
@@ -86,6 +88,12 @@ public float getOrientation() {
 }
 public void setOrientation(float orientation) {
 	this.orientation = orientation;
+}
+public float getSize() {
+	return size;
+}
+public void setSize(float size) {
+	this.size = size;
 }
 
 }

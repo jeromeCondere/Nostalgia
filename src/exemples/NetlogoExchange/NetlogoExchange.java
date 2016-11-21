@@ -31,7 +31,7 @@ public class NetlogoExchange {
 
 		
 		agt1.setFps(40);
-		agt2.setFps(1);
+		agt2.setFps(40);
 		
 		agt1.addOutputConnection("out1","in2",agt2);//agt1(out1)> agt2 (in2)
 		agt2.addInputConnection("in2","out1", agt1);//agt2(in2) < agt1(out1)
