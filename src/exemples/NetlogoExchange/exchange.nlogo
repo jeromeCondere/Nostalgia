@@ -1,13 +1,17 @@
-; Access
-
 globals [g-out-patch-color g-limit g-color g-size g-count]
 
-; Initialization
+
+
+to setup-default-globals
+  set g-color green
+  set g-size 2
+  set g-count 2
+end
 
 to setup
   clear-all
   reset-ticks
-  
+
   setup-default-globals
   
   create-turtles g-count
@@ -15,64 +19,81 @@ to setup
     set color g-color
     set size g-size
     setxy ( max-pxcor / 2) (max-pycor / 2)
+
     
   ]
-
 end
-
-; Change
 
 to go
  
   ask turtles
   [
-    rt (random-float 180)
-    fd 2
+ 
+    fd 0.5
+     if  ycor >= max-pycor or ycor <= min-pycor
+    [
+      lt ( 2 * heading - 180 )
+      
+    ]
+    if xcor >= max-pxcor or xcor <= min-pxcor
+    [
+     lt (2 * heading)
+    ]
+    ;;rt 1
   ]
   
   tick
 end
-
-; Implementation
-
-to setup-default-globals
-  set g-color green
-  set g-size 2
-  set g-count 2
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
-5
-61
-366
-443
+43
+83
+349
+410
 -1
 -1
-5.95
+8.97
 1
 10
 1
 1
 1
 0
-1
-1
+0
+0
 1
 0
-58
+32
 0
-58
-1
-1
+32
+0
+0
 1
 ticks
 30.0
 
 BUTTON
-389
-87
-452
-120
+108
+36
+181
+69
+NIL
+setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+238
+36
+301
+69
 NIL
 go
 T
@@ -85,52 +106,42 @@ NIL
 NIL
 1
 
-BUTTON
-391
-155
-456
-189
-setup
-setup
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-MONITOR
-5
-12
-100
-57
-Walker count
-count turtles
-17
-1
-11
-
 @#$#@#$#@
+## WHAT IS IT?
 
-C. Bourjot, B. Camus, V. Chevrier, L. Ciarletta, V. Elvinger, Y. Presse, J. Siebert, J. Vaubourg,
-Copyright (c) Université de Lorraine & INRIA, Affero GPL license v3, 2014-2015, v1.0
+(a general understanding of what the model is trying to show or explain)
 
+## HOW IT WORKS
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+(what rules the agents use to create the overall behavior of the model)
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+## HOW TO USE IT
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+(how to use the model, including a description of each of the items in the Interface tab)
+
+## THINGS TO NOTICE
+
+(suggested things for the user to notice while running the model)
+
+## THINGS TO TRY
+
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+
+## EXTENDING THE MODEL
+
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+
+## NETLOGO FEATURES
+
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
+## RELATED MODELS
+
+(models in the NetLogo Models Library and elsewhere which are of related interest)
+
+## CREDITS AND REFERENCES
+
+(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
 @#$#@#$#@
 default
 true
@@ -324,10 +335,21 @@ Polygon -7500403 true true 135 105 90 60 45 45 75 105 135 135
 Polygon -7500403 true true 165 105 165 135 225 105 255 45 210 60
 Polygon -7500403 true true 135 90 120 45 150 15 180 45 165 90
 
-ring
-true
-0
-Circle -7500403 false true -1 -1 301
+sheep
+false
+15
+Circle -1 true true 203 65 88
+Circle -1 true true 70 65 162
+Circle -1 true true 150 105 120
+Polygon -7500403 true false 218 120 240 165 255 165 278 120
+Circle -7500403 true false 214 72 67
+Rectangle -1 true true 164 223 179 298
+Polygon -1 true true 45 285 30 285 30 240 15 195 45 210
+Circle -1 true true 3 83 150
+Rectangle -1 true true 65 221 80 296
+Polygon -1 true true 195 285 210 285 210 240 240 210 195 210
+Polygon -7500403 true false 276 85 285 105 302 99 294 83
+Polygon -7500403 true false 219 85 210 105 193 99 201 83
 
 square
 false
@@ -412,6 +434,13 @@ Line -7500403 true 216 40 79 269
 Line -7500403 true 40 84 269 221
 Line -7500403 true 40 216 269 79
 Line -7500403 true 84 40 221 269
+
+wolf
+false
+0
+Polygon -16777216 true false 253 133 245 131 245 133
+Polygon -7500403 true true 2 194 13 197 30 191 38 193 38 205 20 226 20 257 27 265 38 266 40 260 31 253 31 230 60 206 68 198 75 209 66 228 65 243 82 261 84 268 100 267 103 261 77 239 79 231 100 207 98 196 119 201 143 202 160 195 166 210 172 213 173 238 167 251 160 248 154 265 169 264 178 247 186 240 198 260 200 271 217 271 219 262 207 258 195 230 192 198 210 184 227 164 242 144 259 145 284 151 277 141 293 140 299 134 297 127 273 119 270 105
+Polygon -7500403 true true -1 195 14 180 36 166 40 153 53 140 82 131 134 133 159 126 188 115 227 108 236 102 238 98 268 86 269 92 281 87 269 103 269 113
 
 x
 false

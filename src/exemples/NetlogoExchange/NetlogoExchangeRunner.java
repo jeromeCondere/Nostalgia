@@ -41,45 +41,31 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 
 	@Override
 	public void treatInput(String inbox, ACLMessage message) {
-		// TODO Auto-generated method stub
-		Pattern p = Pattern.compile("^in.*");
-		Matcher m = p.matcher(inbox);
-		//if the name of the inbox starts with in
+		
+		
+		float eps=0.02f;
+		float epsilon =1f;
+		epsilon+=eps;
+		ArrayList<NetlogoTurtle> tl;
 		if(inbox.equals("in2"))
 		{
 			//in by left
-			ArrayList<NetlogoTurtle> tl;
 			try {
 				tl = NetlogoJson.getTurtles(message.getContent());
+				inLeft(epsilon,tl);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
 		else if(inbox.equals("in1"))
 		{
-			//in by left
+			//in by right
 			try {
-				float eps=0.02f;
-				float epsilon =15f;
-				epsilon+=eps;
-				ArrayList<NetlogoTurtle> tl;
 				tl = NetlogoJson.getTurtles(message.getContent());
-				String cmd="";
-				for(int i=0;i<tl.size();i++)
-				{
-					NetlogoTurtle turtle=tl.get(i);
-					cmd+="create-turtles 1 [ ";
-					cmd+="set size 3 \n";
-					cmd+="setxy ( max-pxcor - "+epsilon+" ) "+turtle.getY()+" \n";
-					cmd+="set heading "+ turtle.getOrientation()+ "\n";
-					cmd+=" ] \n";
-				}
-				this.NetlogoCmd(cmd);
+				inRight(epsilon,tl);
+				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				return;
+				e.printStackTrace();
 			}
 			
 		}
@@ -90,7 +76,7 @@ public class NetlogoExchangeRunner extends NetlogoRunner implements
 	public String getOutput(String outbox, String user) {
 		// TODO Auto-generated method stub
 		ArrayList <NetlogoTurtle>turtles;
-		float epsilon =15f;
+		float epsilon =1f;
 		if(outbox.equals("out1"))
 		{
 			turtles = RightBorder(epsilon);

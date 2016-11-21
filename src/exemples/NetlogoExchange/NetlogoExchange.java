@@ -22,8 +22,8 @@ public class NetlogoExchange {
 		Profile myProfile = new ProfileImpl();
 		ContainerController myContainer = runt.createMainContainer(myProfile);
 		  
-		NetlogoExchangeRunner runner1=new NetlogoExchangeRunner("walk_1.nlogo",400,400);
-		NetlogoExchangeRunner runner2=new NetlogoExchangeRunner("walk_1.nlogo",400,400);
+		NetlogoExchangeRunner runner1=new NetlogoExchangeRunner("exchange.nlogo",400,400);
+		NetlogoExchangeRunner runner2=new NetlogoExchangeRunner("exchange.nlogo",400,400);
 		runner1.setName("R1");
 		runner2.setName("R2");
 		NetlogoAgent agt1=new NetlogoAgent(runner1,"netlogo_simple1");
