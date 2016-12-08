@@ -5,3 +5,6 @@ add tests for json parsing
 
 add maven for sources
 
+in box replace ArrayList by Set because 
+the outboxes for one inbox are different (same thing in outbox)
+
