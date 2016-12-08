@@ -1,0 +1,7 @@
+replace arraylist system in box classes
+by hashmap
+
+add tests for json parsing
+
+add maven for sources
+
